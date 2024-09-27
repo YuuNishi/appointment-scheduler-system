@@ -15,3 +15,4 @@ class PersonResponse(BaseModel):
     name: str
     gender:int
     birth_date: date
+    user: str
