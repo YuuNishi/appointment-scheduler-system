@@ -22,7 +22,7 @@ class PatientRepository:
     def exists_by_id(self, _id: id):
         patient=self.session.query(Patient).filter_by(id=_id).first()
         return bool(patient)
-    def update(self, data: Patient, patient: Patient):
+    def update(self, data: PatientInput, patient: Patient):
         patient.name = data.name
         patient.cpf = data.cpf
         patient.address = data.address

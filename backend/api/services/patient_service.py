@@ -17,7 +17,7 @@ class PatientService:
         if not self.patient_repository.exists_by_id(_id):
             raise HTTPException(status_code=404, detail='Paciente não encontrado')
         patient = self.patient_repository.get_by_id(_id)
-        return self.patient_repository.update(patient,data)
+        return self.patient_repository.update(data,patient)
     def delete(self,_id: int):
         if not self.patient_repository.exists_by_id(_id):
             raise HTTPException(status_code=404, detail='Paciente não encontrado')
