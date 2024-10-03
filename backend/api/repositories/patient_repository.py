@@ -2,9 +2,6 @@ from models.patient import Patient
 from sqlalchemy.orm import Session
 from schemas.patient_schema import PatientInput, PatientResponse
 
-from models.person import Person
-
-
 class PatientRepository:
     def __init__(self, session: Session):
         self.session = session

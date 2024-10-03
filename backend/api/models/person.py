@@ -1,6 +1,4 @@
 from sqlalchemy import Column, Integer, String,Date,SmallInteger
-from datetime import datetime
-from sqlalchemy.orm import relationship
 from database.database import Base
 
 class Person(Base):

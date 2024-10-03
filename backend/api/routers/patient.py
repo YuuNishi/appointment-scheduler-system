@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from database.database import get_db
 from schemas.patient_schema import PatientResponse, PatientInput
 from services.patient_service import PatientService
-from models.patient import Patient
 
 router = APIRouter(prefix="/patient", tags=["patient"])
 
