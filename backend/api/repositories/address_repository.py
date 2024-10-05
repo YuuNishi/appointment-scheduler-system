@@ -2,7 +2,7 @@ from models.address import Address
 from sqlalchemy.orm import Session
 from schemas.address_schema import AddressInput, AddressResponse
 
-class AatientRepository:
+class AddressRepository:
     def __init__(self, session: Session):
         self.session = session
     def create(self, adress: Address)-> AddressResponse:
@@ -10,7 +10,7 @@ class AatientRepository:
         self.session.add(adress)
         self.session.commit()
         self.session.refresh(adress)
-        return AatientRepository(**adress.__dict__)
+        return AddressRepository(**adress.__dict__)
     def get_by_id(self, _id: int):
         return self.session.query(Address).filter_by(id=_id).first()
     def exists_by_id(self, _id: id):
