@@ -1,3 +1,4 @@
+from datetime import datetime
 from models.patient import Patient
 from sqlalchemy.orm import Session
 from schemas.patient_schema import PatientInput, PatientResponse
@@ -22,8 +23,9 @@ class PatientRepository:
     def update(self, data: PatientInput, patient: Patient):
         patient.name = data.name
         patient.cpf = data.cpf
-        patient.address = data.address
+        patient.address_id = data.address_id
         patient.birth_date = data.birth_date
+        patient.updated_at = datetime.now()
         self.session.commit()
         self.session.refresh(patient)
         return PatientInput(**patient.__dict__)
