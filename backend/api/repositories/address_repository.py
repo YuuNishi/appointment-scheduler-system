@@ -29,10 +29,9 @@ class AddressRepository:
         address.neighborhood = data.neighborhood
         self.session.commit()
         self.session.refresh(address)
-        return AddressInput(**address.__dict__)
+        return AddressResponse(**address.__dict__)
 
     def delete(self, address: Address):
         self.session.delete(address)
         self.session.commit()
-        self.session.refresh(address)
-        return AddressInput(**address.__dict__)
+        return AddressResponse(**address.__dict__)
