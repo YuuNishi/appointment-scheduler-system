@@ -5,6 +5,7 @@ from schemas.address_schema import AddressInput, AddressResponse
 class AddressRepository:
     def __init__(self, session: Session):
         self.session = session
+<<<<<<< HEAD
     def create(self, address: Address)-> AddressResponse:
         address = Address(**address.model_dump(exclude_none=True))
         self.session.add(address)
@@ -14,11 +15,23 @@ class AddressRepository:
     def get_all(self):
         address= self.session.query(Address)
         return address
+=======
+
+    def create(self, address: Address)-> AddressResponse:
+        address = AddressResponse(**address.model_dump(exclude_none=True))
+        self.session.add(address)
+        self.session.commit()
+        self.session.refresh(address)
+        return AddressRepository(**address.__dict__)
+
+>>>>>>> 72ae8aeb67361b3b73c1f2bdccbaf0638e688ba1
     def get_by_id(self, _id: int):
         return self.session.query(Address).filter_by(id=_id).first()
+
     def exists_by_id(self, _id: id):
         address=self.session.query(Address).filter_by(id=_id).first()
         return bool(address)
+
     def update(self, data: AddressInput, address: Address):
         address.cep = data.cep
         address.street = data.street
@@ -28,9 +41,9 @@ class AddressRepository:
         address.neighborhood = data.neighborhood
         self.session.commit()
         self.session.refresh(address)
-        return AddressInput(**address.__dict__)
+        return AddressResponse(**address.__dict__)
+
     def delete(self, address: Address):
         self.session.delete(address)
         self.session.commit()
-        self.session.refresh(address)
-        return AddressInput(**address.__dict__)
+        return AddressResponse(**address.__dict__)
