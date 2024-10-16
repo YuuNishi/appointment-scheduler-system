@@ -5,12 +5,15 @@ from schemas.address_schema import AddressInput, AddressResponse
 class AddressRepository:
     def __init__(self, session: Session):
         self.session = session
-    def create(self, adress: Address)-> AddressResponse:
-        adress = AddressResponse(**adress.model_dump(exclude_none=True))
-        self.session.add(adress)
+    def create(self, address: Address)-> AddressResponse:
+        address = Address(**address.model_dump(exclude_none=True))
+        self.session.add(address)
         self.session.commit()
-        self.session.refresh(adress)
-        return AddressRepository(**adress.__dict__)
+        self.session.refresh(address)
+        return AddressResponse(**address.__dict__)
+    def get_all(self):
+        address= self.session.query(Address)
+        return address
     def get_by_id(self, _id: int):
         return self.session.query(Address).filter_by(id=_id).first()
     def exists_by_id(self, _id: id):
