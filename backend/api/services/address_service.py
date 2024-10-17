@@ -13,7 +13,6 @@ class AddressService:
         address = self.address_repository.create(address)
         return AddressResponse(**address.model_dump(exclude_none=True))
         
-
     def update(self, _id:int, data: AddressInput):
         if not self.address_repository.exists_by_id(_id):
             raise HTTPException(status_code=404, detail='Endereço não encontrado')

@@ -17,9 +17,11 @@ class AddressRepository:
     def get_by_id(self, _id: int):
         return self.session.query(Address).filter_by(id=_id).first()
 
+
     def exists_by_id(self, _id: id):
         address=self.session.query(Address).filter_by(id=_id).first()
         return bool(address)
+
 
     def update(self, data: AddressInput, address: Address):
         address.cep = data.cep

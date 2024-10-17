@@ -16,3 +16,13 @@ def create_address(dados: AddressInput, session: Session = Depends(get_db)):
 def get_all(session: Session = Depends(get_db)):
     _service = AddressService(session)
     return _service.get_all()
+
+@router.put("/{_id}", status_code=200, response_model=AddressResponse)
+def update(_id:int, data: AddressInput, session: Session=Depends(get_db)):
+    _service = AddressService(session)
+    return _service.update(_id, data)
+
+@router.delete("/{_id}", status_code=200, response_model=AddressResponse)
+def delete(_id:int, session: Session = Depends(get_db)):
+    _service = AddressService(session)
+    return _service.delete(_id)
