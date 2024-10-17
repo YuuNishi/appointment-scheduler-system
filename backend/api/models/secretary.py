@@ -1,5 +1,4 @@
-from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Date
 from models.person import Person
 
 class Secretary(Person):
@@ -7,7 +6,7 @@ class Secretary(Person):
 
     id = Column(ForeignKey('person.id'), primary_key=True,index=True)
 
-    person = relationship('Person')
+    hiring_date = Column(Date)
 
     __mapper_args__ = {
         'polymorphic_identity': 'secretary'
