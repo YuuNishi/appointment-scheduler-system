@@ -6,6 +6,7 @@ from models.secretary import Secretary
 from models.specialty import Specialty
 from models.doctor import Doctor
 from models.appointment import Appointment
+from models.user import User
 
 def create_tables():
     Address.metadata.create_all(bind=engine)
@@ -16,3 +17,4 @@ def create_tables():
     Doctor.metadata.create_all(bind=engine)
     Specialty.metadata.create_all(bind=engine)
     Appointment.metadata.create_all(bind=engine)
+    User.metadata.create_all(bind=engine)
