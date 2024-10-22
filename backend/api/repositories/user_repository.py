@@ -19,3 +19,6 @@ class UserRepository:
         self.session.refresh(user)
         
         return UserResponse(**user.__dict__)
+
+    def get_by_email(self, email: str):
+        return self.session.query(User).filter_by(email=email).first()
