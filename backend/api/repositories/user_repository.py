@@ -1,8 +1,7 @@
 import bcrypt
-from models.address import Address
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from models.user import User
-from schemas.address_schema import AddressInput, AddressResponse
 from schemas.user_schema import UserInput, UserResponse
 
 class UserRepository:
@@ -22,3 +21,6 @@ class UserRepository:
 
     def get_by_email(self, email: str):
         return self.session.query(User).filter_by(email=email).first()
+
+    def user_exists(self, email: str, username: str):
+        return self.session.query(User).filter(or_(email == email, username == username)).first() is not None
