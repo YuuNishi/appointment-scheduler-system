@@ -20,7 +20,7 @@ def get_all(session: Session = Depends(get_db)):
 def update(_id:int, data: PatientInput, session: Session=Depends(get_db)):
     _service = PatientService(session)
     return _service.update(_id, data)
-@router.patch("/{_id}", status_code=200, response_model=PatientInput)
+@router.delete("/{_id}", status_code=200, response_model=PatientInput)
 def delete(_id:int, session: Session = Depends(get_db)):
     _service = PatientService(session)
     return _service.delete(_id)

@@ -20,7 +20,7 @@ def get_all(session: Session = Depends(get_db)):
 def update(_id:int, data: SecretaryInput, session: Session=Depends(get_db)):
     _service = Secretary_Service(session)
     return _service.update(_id, data)
-@router.patch("/{_id}", status_code=200, response_model=SecretaryInput)
+@router.delete("/{_id}", status_code=200, response_model=SecretaryInput)
 def delete(_id:int, session: Session = Depends(get_db)):
     _service = Secretary_Service(session)
     return _service.delete(_id)

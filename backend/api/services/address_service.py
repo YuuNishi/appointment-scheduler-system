@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
 from repositories.address_repository import AddressRepository
