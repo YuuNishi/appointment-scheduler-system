@@ -7,5 +7,8 @@ class UserInput(BaseModel):
     username: str = Field(min_length=10, max_length=100)
     password: str = Field(min_length=15, max_length=30)
 
+class UserPasswordInput(BaseModel):
+    password: str = Field(min_length=15, max_length=30)
+
 class UserResponse(BaseModel):
     username: str
