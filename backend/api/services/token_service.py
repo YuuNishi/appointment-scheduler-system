@@ -1,4 +1,3 @@
-
 import bcrypt
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -14,8 +13,8 @@ class TokenService:
 
     def create(self, data: TokenInput):
         user = self.user_repository.get_by_email(data.email)
-
-        if bool(user) & bcrypt.checkpw(data.password.encode('utf-8'), user.password):
+        
+        if bool(user) and bcrypt.checkpw(data.password.encode('utf-8'), user.password):
             token = TokenUtils.generate_token(user)
         else:
             raise HTTPException(status_code=404, detail='E-mail e/ou senha incorretos')

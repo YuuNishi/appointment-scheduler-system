@@ -36,4 +36,4 @@ class UserRepository:
         return self.session.query(User).filter_by(email=email).first()
 
     def user_exists(self, email: str, username: str):
-        return self.session.query(User).filter(or_(email == email, username == username)).first() is not None
+        return self.session.query(User).filter(or_(User.email == email, User.username == username)).first() is not None
