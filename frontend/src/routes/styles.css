@@ -1,0 +1,16 @@
+main {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.content-background-white {
+  background-color: #F0F0F0;
+}
+
+.content-background-dark {
+  background-color: #2f3133;
+}

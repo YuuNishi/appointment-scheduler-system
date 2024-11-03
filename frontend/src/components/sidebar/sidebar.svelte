@@ -1,47 +1,79 @@
 <script lang="ts">
-  import 'iconify-icon'
+  import { onMount } from 'svelte'
 
-  function handleIconClick(iconName: string) {
-    console.log(`Ícone clicado: ${iconName}`);
-  }
+  import 'iconify-icon';
+  import UserAvatar from '$lib/assets/placeholder_user.png';
+
+  let activePage = 'appointments';
+  let isDarkMode : boolean;
+
+  export { isDarkMode }
+
+  onMount(() => (isDarkMode = false));
 </script>
 
-<div class="sidebar">
-  <div class="icon-div" on:click={() => handleIconClick('calendar')}>
-    <iconify-icon icon="mdi:calendar-outline" width="36" height="36" class="icon"/>
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3 {(isDarkMode && 'text-white' && 'bg-dark') || ('bg-white')}">
+  <div class="dropdown">
+    <a
+      class="d-flex align-items-center {isDarkMode && 'text-white'} text-decoration-none dropdown-toggle"
+      id="dropdownUser"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <img
+        src={UserAvatar}
+        alt="user"
+        width="32"
+        height="32"
+        class="rounded-circle me-2"
+      />
+      <strong>Usuário</strong>
+    </a>
+    <ul class="dropdown dropdown-menu dropdown-menu-dark text-small shadow w-100 " aria-labelledby="dropdownUser">
+      <li>
+        <div class="dropdown-item form-check form-switch d-flex align-items-center justify-content-between px-3">
+          <label class="form-check-label me-2" for="flexSwitchCheckChecked">
+            Tema escuro
+          </label>
+          <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" bind:checked={isDarkMode} />
+        </div>
+      </li>
+      <li><a class="dropdown-item" href="/settings">Configurações</a></li>
+    </ul>
   </div>
-  <div class="icon-div" on:click={() => handleIconClick('records')}>
-    <iconify-icon icon="cuida:user-add-outline" width="36" height="36" class="icon"/>
-  </div>
-  <div class="icon-div" on:click={() => handleIconClick('settings')}>
-    <iconify-icon icon="material-symbols:settings-outline" width="36" height="36" class="icon"/>
-  </div>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto gap-1">
+    <li>
+      <a href="/appointments" class="nav-link {(activePage == 'appointments' && 'active') || 'hover-link'} {isDarkMode && 'text-white'} d-flex align-items-center" aria-current="page">
+        <iconify-icon icon="mdi:calendar-outline" width="28" height="28" class="me-2" />
+        Agendamento
+      </a>
+    </li>
+    <li>
+      <a href="/records" class="nav-link {(activePage == 'records' && 'active') || 'hover-link' } {isDarkMode && 'text-white'} d-flex align-items-center">
+        <iconify-icon icon="cuida:user-add-outline" width="28" height="28" class="me-2" />
+        Prontuários
+      </a>
+    </li>
+  </ul>
+  <hr style="color: {(isDarkMode && 'white') || 'black'}"/>
+  <a href="/leave" class="nav-link {isDarkMode && 'text-white'} d-flex align-items-center">
+    <iconify-icon icon="dashicons:exit" width="28" height="28" class="me-2" />
+    Sair
+  </a>
 </div>
 
 <style>
   .sidebar {
-    padding: 1px;
-    background-color: #007BFF;
-    width: 64px;
+    width: 260px;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  .icon-div {
-    display: flex;
-    padding: 10px;
-    margin: 0 0 10px 0;
+  .hover-link:hover {
+    background-color: #72727242;
+  }
+
+  a {
     cursor: pointer;
-    transition: color 0.3s;
-  }
-
-  .icon-div:hover {
-    background-color:rgba(255, 255, 255, 0.329);
-  }
-
-  .icon {
-    color: white;
   }
 </style>
