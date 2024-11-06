@@ -1,6 +1,13 @@
 <script>
 	import Sidebar from "../../components/sidebar/sidebar.svelte";
+  import { imask } from '@imask/svelte';
   
+  const options = { 
+		date: '00/00/0000',
+    cpf: '000.000.000-00',
+    cep: '00000-000'
+	};
+
 </script>
 
 <main>
@@ -15,11 +22,11 @@
       </div>
       <div>
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" placeholder=""/>
+        <input use:imask={options.cpf} type="text" id="cpf" placeholder="___.___.___-__"/>
       </div>  
       <div>
         <label for="birthdate">Data Nascimento:</label>
-        <input type="text" id="birthdate"/>
+        <input use:imask={options.date} type="text" id="birthdate" placeholder="__/__/____"/>
       </div>  
       <div>
         <label for="gender">Sexo:</label>
@@ -35,7 +42,7 @@
       <p>Endereço</p>
       <div>
         <label for="CEP">CEP:</label>
-        <input id="CEP"/>  
+        <input use:imask={options.cep} id="CEP" placeholder="_____-__"/>  
       </div>  
       <div class="form-row">
           <div class="form-group col-md-6">
@@ -44,7 +51,7 @@
           </div>  
           <div>
             <label for="number">Número:</label> 
-            <input id="number"/>
+            <input id="number" type="number"/>
           </div>  
       </div>
       <div>
