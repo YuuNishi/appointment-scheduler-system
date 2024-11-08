@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-
+  import { page } from '$app/stores';
   import 'iconify-icon';
   import UserAvatar from '$lib/assets/placeholder_user.png';
 
-  let activePage = 'appointments';
+  let activePage = $page.url.pathname;
   let isDarkMode : boolean;
 
   export { isDarkMode }
@@ -44,13 +44,13 @@
   <hr />
   <ul class="nav nav-pills flex-column mb-auto gap-1">
     <li>
-      <a href="/appointments" class="nav-link {(activePage == 'appointments' && 'active') || 'hover-link'} {isDarkMode && 'text-white'} d-flex align-items-center" aria-current="page">
+      <a href="/appointments" class="nav-link {(activePage == '/appointments' && 'active') || 'hover-link'} {isDarkMode && 'text-white'} d-flex align-items-center" aria-current="page">
         <iconify-icon icon="mdi:calendar-outline" width="28" height="28" class="me-2" />
         Agendamento
       </a>
     </li>
     <li>
-      <a href="/records" class="nav-link {(activePage == 'records' && 'active') || 'hover-link' } {isDarkMode && 'text-white'} d-flex align-items-center">
+      <a href="/records" class="nav-link {(activePage == '/records' && 'active') || 'hover-link' } {isDarkMode && 'text-white'} d-flex align-items-center">
         <iconify-icon icon="cuida:user-add-outline" width="28" height="28" class="me-2" />
         Prontuários
       </a>

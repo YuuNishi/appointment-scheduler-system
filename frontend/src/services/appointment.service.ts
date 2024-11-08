@@ -1,10 +1,10 @@
 import moment from "moment";
-import type { GetByRangeType } from "../types/services/appointment.types";
-import { get } from "./core.service";
+import type { CreateAppointment, GetByRangeType } from "../types/services/appointment.types";
+import { get, post } from "./core.service";
 
 const ROUTE = "/appointments";
 
-export const get_by_range = async (data: GetByRangeType) => {
+export const get_appointments_by_range = async (data: GetByRangeType) => {
   const uri = ROUTE + "/range";
   
   const params = new URLSearchParams({
@@ -16,4 +16,10 @@ export const get_by_range = async (data: GetByRangeType) => {
     params.append("criteria", data.criteria as string);
 
   return await get(uri, params);
+}
+
+export const create_appointment = async (data: CreateAppointment) => {
+  const uri = ROUTE + "/";
+
+  return await post(uri, data);
 }

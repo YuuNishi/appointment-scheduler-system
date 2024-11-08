@@ -3,11 +3,16 @@
   import moment from 'moment';
   import Appointment from '../../components/appointment/appointment.svelte';
   import Sidebar from '../../components/sidebar/sidebar.svelte';
-  import { get_by_range } from '../../services/appointment.service';
+  import { get_appointments_by_range } from '../../services/appointment.service';
   import type {
     GetByRangeResponseType,
     GetByRangeType
   } from '../../types/services/appointment.types';
+  import AppointmentCreate from '../../components/appointment/appointment_create.modal.svelte';
+  import type { GetAllDoctorsType } from '../../types/services/doctor.types';
+  import { get_all_doctors } from '../../services/doctor.service';
+  import type { GetAllPatientType } from '../../types/services/patient.types';
+  import { get_all_patients } from '../../services/patient.service';
 
   let isDarkMode: boolean;
 
@@ -38,11 +43,9 @@
       criteria: (criteria as HTMLInputElement)?.value
     };
 
-    var result = await get_by_range(data);
+    var result = await get_appointments_by_range(data);
 
     appointments = await result.json();
-
-    console.log(appointments);
   }
 
   function goToPreviousWeek() {
@@ -75,6 +78,30 @@
 
     return currentAppointment.day() == day && currentAppointment.hour() == hour;
   }
+
+  let doctors: GetAllDoctorsType[] = [];
+  let patients: GetAllPatientType[] = [];
+
+  async function executeAppointmentServices() {
+    await getAllDoctors();
+    await getAllPatients();
+  }
+
+  async function getAllDoctors() {
+    doctors = [];
+
+    var result = await get_all_doctors();
+
+    doctors = await result.json();
+  }
+
+  async function getAllPatients() {
+    patients = [];
+
+    var result = await get_all_patients();
+
+    patients = await result.json();
+  }
 </script>
 
 <main>
@@ -101,8 +128,14 @@
           </div>
 
           <div class="buttons">
-            <button type="button" class="btn new-consult">Nova Consulta</button>
-            <button type="button" class="btn export">Export</button>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#appointmentCreate"
+              type="button"
+              class="btn new-appointment"
+              on:click={executeAppointmentServices}>Nova Consulta</button
+            >
+            <AppointmentCreate bind:doctors bind:patients />
           </div>
         </div>
       </nav>
@@ -119,8 +152,9 @@
       <div class="calendar-grid">
         {#each Array(7) as _, dayIndex}
           <div class="day-column">
-            {#each Array(10) as _, hourIndex}
+            {#each Array(24) as _, hourIndex}
               <div class="time-slot" style="position: relative;">
+                <span class="side-time">{moment(moment().date()).hour(hourIndex).format('H:mm')}</span>
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
                     <Appointment appointmentInfo={appointment} />
@@ -179,7 +213,7 @@
     font-size: 14px;
   }
 
-  .new-consult {
+  .new-appointment {
     background-color: #28a745;
     color: #fff;
   }
@@ -226,5 +260,23 @@
   .time-slot {
     height: 60px;
     border-bottom: 1px solid #ddd;
+  }
+
+  .side-time {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 6px;
+    color: #555;
+    width: 40px;
+    text-align: right;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    max-height: 600px;
+    overflow-y: scroll;
+    border-top: 1px solid #ddd;
   }
 </style>

@@ -6,7 +6,8 @@
   export { appointmentInfo }
 </script>
 
-<div class="event {appointmentInfo.paid ? 'event-pending' : 'event-paid'}">{appointmentInfo.title}<br>{appointmentInfo.start_time} - {appointmentInfo.finish_time}</div>
+<div data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointmentInfo.paid ? 'event-pending' : 'event-paid'}">{appointmentInfo.title}<br>{appointmentInfo.start_time} - {appointmentInfo.finish_time}</div>
+<!-- <AppointmentUpdate /> -->
 
 <style>
   .event-paid {
