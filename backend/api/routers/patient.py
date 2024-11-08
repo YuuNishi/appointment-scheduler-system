@@ -5,7 +5,7 @@ from database.database import get_db
 from schemas.patient_schema import PatientResponse, PatientInput
 from services.patient_service import PatientService
 
-router = APIRouter(prefix="/patient", tags=["patient"])
+router = APIRouter(prefix="/patients", tags=["patient"])
 
 @router.post("/", status_code=201, response_model=PatientResponse)
 def create_patient(dados: PatientInput, session: Session = Depends(get_db)):
