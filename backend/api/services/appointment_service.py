@@ -8,7 +8,7 @@ class AppointmentService:
         self.appointment_repository = AppointmentRepository(session)
     
     def create(self, data: AppointmentInput):
-        appointment = self.appointment_repository.create(data)
+        appointment = self.appointment_repository.create(data, data.doctor_ids)
         return AppointmentCreateResponse(**appointment.model_dump(exclude_none=True))
     
     def get_by_range(self, data: AppointmentByRangeInput):
