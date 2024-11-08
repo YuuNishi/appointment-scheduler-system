@@ -42,8 +42,8 @@
       ],
       patient_id: patientId,
       date: moment(dateTime).format('yyyy-MM-DD'),
-      start_time: moment(dateTime).format('hh:mm:ss'),
-      finish_time: moment(dateTime).add(finishTime, 'minute').format('hh:mm:ss'),
+      start_time: moment(dateTime).format('HH:mm:ss'),
+      finish_time: moment(dateTime).add(finishTime, 'minute').format('HH:mm:ss')
     };
 
     try {
