@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Sidebar from "../../components/sidebar/sidebar.svelte";
   import { imask } from '@imask/svelte';
   
@@ -8,13 +8,21 @@
     cep: '00000-000'
 	};
 
+  export let data
+
+  // todo
+  async function addTodo(event: Event) {}
+
+  // todo
+  async function removeTodo(event: Event) {}
+
 </script>
 
 <main>
   <Sidebar />
   <div class="content">
     <h1>Novo Paciente</h1>
-    <form method="POST" action="?/register" >
+    <form method="POST" action="/api/patient/" >
       <p>Geral</p>
       <div class="row g-2 align-items-center">
         <div class="col-auto">
@@ -109,8 +117,14 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-default btn-outline" >Voltar sem salvar</button>
-      <button class="btn btn-success">salvar</button>
+      <div class="row">
+        <div class="col align-self-end">
+          <button type="button" class="btn btn-default btn-outline" >Voltar sem salvar</button>
+          <button class="btn btn-success" type="submit">Salvar</button>
+        </div>
+      </div>
+      
+      
     </form>  
   </div>
 </main>
