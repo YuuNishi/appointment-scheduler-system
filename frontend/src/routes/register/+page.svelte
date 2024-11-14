@@ -8,14 +8,6 @@
     cep: '00000-000'
 	};
 
-  export let data
-
-  // todo
-  async function addTodo(event: Event) {}
-
-  // todo
-  async function removeTodo(event: Event) {}
-
 </script>
 
 <main>
@@ -58,8 +50,8 @@
         <div class="col-md-2">
           <select id="gender" name="gender" class="form-control">
             <option value="default">Selecione</option>
-            <option value=0>Feminino</option>
-            <option value=1>Masculino</option>
+            <option value=0>Masculino</option>
+            <option value=1>Feminino</option>
           </select> 
         </div>
       </div>
@@ -67,10 +59,10 @@
 
       <div class="row g-2 align-items-center">
         <div class="col-auto">
-          <label for="CEP">CEP:</label>
+          <label for="cep">CEP:</label>
         </div>
         <div class="col-md-2">
-          <input use:imask={options.cep} id="CEP" name="CEP" class="form-control" placeholder="_____-__"/>
+          <input use:imask={options.cep} id="cep" name="cep" class="form-control" placeholder="_____-__"/>
         </div>
       </div>
 
@@ -111,8 +103,8 @@
         <div class="col-md-auto">
           <select id="state" name="state" class="form-control">
             <option value="default">Selecione</option>
-            <option value=0>Feminino</option>
-            <option value=1>Masculino</option>
+            <option value='rj'>Feminino</option>
+            <option value='sp'>Masculino</option>
           </select> 
         </div>
       </div>
