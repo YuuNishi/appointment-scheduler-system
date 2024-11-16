@@ -1,5 +1,6 @@
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
+from models.doctor_appointment import doctor_appointment
 from models.appointment import Appointment
 from models.doctor import Doctor
 from models.patient import Patient
@@ -37,6 +38,9 @@ class AppointmentRepository:
 
     def get_by_id(self, _id: int):
         return self.session.query(Appointment).filter_by(id=_id).first()
+
+    def get_doctor_appointment_by_id(self, id: int):
+        return self.session.query(doctor_appointment).filter_by(appointment_id=id).all()
     
     def get_by_range(self, data: AppointmentByRangeInput):
         haveCriteria = bool(data.criteria)

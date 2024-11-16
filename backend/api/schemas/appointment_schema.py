@@ -39,3 +39,14 @@ class AppointmentByRangeResponse(BaseModel):
     start_time: time
     finish_time: time
     paid: PaidEnum
+
+class AppointmentByIdResponse(BaseModel):
+    title: str
+    patient_id: int
+    doctor_ids: List[int]
+    type: AppointmentTypeEnum
+    date: date
+    start_time: time
+    duration: int
+    paid: PaidEnum
+    status: int
