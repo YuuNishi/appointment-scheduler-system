@@ -3,15 +3,21 @@ from fastapi import APIRouter, Depends
 from typing import List
 from sqlalchemy.orm import Session
 from database.database import get_db
-from schemas.appointment_schema import AppointmentInput, AppointmentCreateResponse, AppointmentByRangeInput, AppointmentByRangeResponse
+from schemas.appointment_schema import AppointmentInput, AppointmentResponse, AppointmentByRangeInput, \
+    AppointmentByRangeResponse, AppointmentUpdateInput
 from services.appointment_service import AppointmentService
 
 router = APIRouter(prefix="/appointments", tags=["appointment"])
 
-@router.post("/", status_code=201, response_model=AppointmentCreateResponse)
+@router.post("/", status_code=201, response_model=AppointmentResponse)
 def create(data: AppointmentInput, session: Session = Depends(get_db)):
     _service = AppointmentService(session)
     return _service.create(data)
+
+@router.put("/{_id}", status_code=200, response_model=AppointmentResponse)
+def create(_id:int, data: AppointmentUpdateInput, session: Session = Depends(get_db)):
+    _service = AppointmentService(session)
+    return _service.update(_id, data)
 
 @router.get("/range", status_code=200, response_model=List[AppointmentByRangeResponse])
 def get_by_range(start_date: date, end_date: date, criteria: str | None = None, session: Session = Depends(get_db)):
