@@ -48,7 +48,7 @@ class AppointmentService:
             start_time= appointment.start_time,
             paid= appointment.paid,
             status= appointment.status,
-            duration= startMinutes - endMinutes
+            duration= endMinutes - startMinutes
         )
 
     def get_by_range(self, data: AppointmentByRangeInput):

@@ -5,7 +5,6 @@ class AppointmentTypeEnum(enum.Enum):
     specialty_appointment = 1
     emergency_appointment = 2
     return_appointment = 3
-    exam = 4
 
 class PaidEnum(enum.Enum):
     pending = 0
