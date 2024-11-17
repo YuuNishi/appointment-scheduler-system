@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import moment from 'moment';
-  import Appointment from '../../components/appointment/appointment.svelte';
+  import moment from 'moment'
   import Sidebar from '../../components/sidebar/sidebar.svelte';
   import { get_appointments_by_range } from '../../services/appointment.service';
   import type {
@@ -13,6 +12,7 @@
   import { get_all_doctors } from '../../services/doctor.service';
   import type { GetAllPatientType } from '../../types/services/patient.types';
   import { get_all_patients } from '../../services/patient.service';
+  import AppointmentUpdate from '../../components/appointment/appointment_update.modal.svelte';
 
   let isDarkMode: boolean;
 
@@ -43,7 +43,7 @@
       criteria: (criteria as HTMLInputElement)?.value
     };
 
-    var result = await get_appointments_by_range(data);
+    let result = await get_appointments_by_range(data);
 
     appointments = await result.json();
   }
@@ -71,7 +71,7 @@
     day: number,
     hour: number
   ): boolean {
-    var currentAppointment = moment(appointment.date).add(
+    let currentAppointment = moment(appointment.date).add(
       appointment.start_time.substring(0, 2),
       'hours'
     );
@@ -90,7 +90,7 @@
   async function getAllDoctors() {
     doctors = [];
 
-    var result = await get_all_doctors();
+    let result = await get_all_doctors();
 
     doctors = await result.json();
   }
@@ -98,7 +98,7 @@
   async function getAllPatients() {
     patients = [];
 
-    var result = await get_all_patients();
+    let result = await get_all_patients();
 
     patients = await result.json();
   }
@@ -157,7 +157,8 @@
                 <span class="side-time">{moment(moment().date()).hour(hourIndex).format('H:mm')}</span>
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
-                    <Appointment appointmentInfo={appointment} />
+                    <div on:click={executeAppointmentServices} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-pending' : 'event-paid'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
+                    <AppointmentUpdate currentAppointmentId={appointment.id} bind:doctors bind:patients />
                   {/if}
                 {/each}
               </div>
@@ -218,9 +219,29 @@
     color: #fff;
   }
 
-  .export {
-    background-color: #007bff;
-    color: #fff;
+  .event-paid {
+      border-left: 3px solid #0056b3;
+  }
+
+  .event-pending {
+      border-left: 3px solid red;
+  }
+
+  .event {
+      cursor: pointer;
+      position: absolute;
+      top: 20%;
+      left: 5%;
+      width: 90%;
+      background-color: #e6f7ff;
+      color: #0056b3;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 4px;
+  }
+
+  .event:hover {
+      background-color: #a4dbf5;
   }
 
   .calendar-header {

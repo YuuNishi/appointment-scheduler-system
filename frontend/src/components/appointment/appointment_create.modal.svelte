@@ -117,8 +117,7 @@
               bind:value={appointmentType}
               on:input={validateForm}
             >
-              <option selected>Selecione o tipo de agendamento</option>
-              <option value=4>Exame</option>
+              <option selected value="" disabled>Selecione o tipo de agendamento</option>
               <option value=0>Exame de rotina</option>
               <option value=1>Consulta de especialista</option>
               <option value=2>Consulta de emergência</option>
@@ -136,7 +135,7 @@
               bind:value={professionalId}
               on:input={validateForm}
             >
-              <option selected>Selecione o profissional</option>
+              <option selected value="" disabled>Selecione o profissional</option>
               {#each doctors as doctor}
                 <option value="{doctor.id}">{doctor.name}</option>
               {/each}
@@ -153,7 +152,7 @@
               bind:value={patientId}
               on:input={validateForm}
             >
-              <option selected>Selecione o paciente</option>
+              <option selected value="" disabled>Selecione o paciente</option>
               {#each patients as patient}
                 <option value="{patient.id}">{patient.name}</option>
               {/each}
