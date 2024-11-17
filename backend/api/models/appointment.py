@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import CheckConstraint, Column, Date, DateTime, Enum, ForeignKey, SmallInteger, Integer, String, Table, Time
+from sqlalchemy import CheckConstraint, Column, Date, DateTime, Enum, ForeignKey, SmallInteger, Integer, String, Time
 from sqlalchemy.orm import relationship
 from database.database import Base
 from models.enums import PaidEnum, AppointmentTypeEnum

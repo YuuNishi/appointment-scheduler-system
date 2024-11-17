@@ -34,3 +34,21 @@ export const post = async (uri: string, body: any) => {
     body: JSON.stringify(convertNumbers(body))
   });
 }
+
+export const put = async (uri: string, body: any) => {
+  const url = new URL(SERVER_URL + uri);
+
+  return await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(convertNumbers(body))
+  });
+}
+
+export const remove = async (uri: string) => {
+  const url = new URL(SERVER_URL + uri);
+
+  return await fetch(url, {
+    method: 'DELETE'
+  });
+}

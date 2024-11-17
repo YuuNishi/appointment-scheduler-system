@@ -12,7 +12,7 @@
   onMount(() => (isDarkMode = false));
 </script>
 
-<div class="sidebar d-flex flex-column flex-shrink-0 p-3 {(isDarkMode && 'text-white' && 'bg-dark') || ('bg-white')}">
+<div class="sidebar flex-column flex-shrink-0 p-3 {(isDarkMode && 'text-white' && 'bg-dark') || ('bg-white')}">
   <div class="dropdown">
     <a
       class="d-flex align-items-center {isDarkMode && 'text-white'} text-decoration-none dropdown-toggle"
@@ -67,6 +67,10 @@
   .sidebar {
     width: 260px;
     height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
   }
 
   .hover-link:hover {

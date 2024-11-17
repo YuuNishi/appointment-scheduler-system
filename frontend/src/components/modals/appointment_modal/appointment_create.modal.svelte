@@ -1,11 +1,14 @@
 <script lang="ts">
   import 'iconify-icon';
-    import type { GetAllDoctorsType } from '../../types/services/doctor.types';
-    import type { GetAllPatientType } from '../../types/services/patient.types';
-    import type { CreateAppointment } from '../../types/services/appointment.types';
+    import type { GetAllDoctorsType } from '../../../types/services/doctor.types';
+    import type { GetAllPatientType } from '../../../types/services/patient.types';
+    import type { CreateAppointment } from '../../../types/services/appointment.types';
     import moment from 'moment';
-    import ErrorToast from '../toast/error_toast.svelte';
-    import { create_appointment } from '../../services/appointment.service';
+    import ErrorToast from '../../toast/error_toast.svelte';
+    import { create_appointment } from '../../../services/appointment.service';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   let showErrorToast: boolean;
   let toastError: string;
@@ -14,7 +17,6 @@
   let patients: GetAllPatientType[] = [];
 
   export { doctors, patients }
-
 
   let appointmentTitle: string;
   let appointmentType: number;
@@ -48,9 +50,11 @@
 
     try {
       await create_appointment(appointmentData);
+      dispatch('submit', { success: true });
     }
     catch {
       showToast(0, "Ocorreu um erro ao criar a consulta. Por favor, tente novamente.");
+      dispatch('submit', { success: false });
     }
   }
 
@@ -117,8 +121,7 @@
               bind:value={appointmentType}
               on:input={validateForm}
             >
-              <option selected>Selecione o tipo de agendamento</option>
-              <option value=4>Exame</option>
+              <option selected value="" disabled>Selecione o tipo de agendamento</option>
               <option value=0>Exame de rotina</option>
               <option value=1>Consulta de especialista</option>
               <option value=2>Consulta de emergência</option>
@@ -136,7 +139,7 @@
               bind:value={professionalId}
               on:input={validateForm}
             >
-              <option selected>Selecione o profissional</option>
+              <option selected value="" disabled>Selecione o profissional</option>
               {#each doctors as doctor}
                 <option value="{doctor.id}">{doctor.name}</option>
               {/each}
@@ -153,7 +156,7 @@
               bind:value={patientId}
               on:input={validateForm}
             >
-              <option selected>Selecione o paciente</option>
+              <option selected value="" disabled>Selecione o paciente</option>
               {#each patients as patient}
                 <option value="{patient.id}">{patient.name}</option>
               {/each}

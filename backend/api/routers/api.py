@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from routers import patient, address, secretary, user, token, appointment, doctor
+from routers import patient, address, secretary, user, token, appointment, doctor, specialty
 from utils.token_gen import TokenUtils
 
 router = APIRouter(prefix="/api")
@@ -13,3 +13,4 @@ router.include_router(appointment.router)
 router.include_router(user.router)
 router.include_router(token.router)
 router.include_router(doctor.router)
+router.include_router(specialty.router)

@@ -1,20 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import moment from 'moment';
-  import Appointment from '../../components/appointment/appointment.svelte';
+  import moment from 'moment'
   import Sidebar from '../../components/sidebar/sidebar.svelte';
   import { get_appointments_by_range } from '../../services/appointment.service';
   import type {
     GetByRangeResponseType,
     GetByRangeType
   } from '../../types/services/appointment.types';
-  import AppointmentCreate from '../../components/appointment/appointment_create.modal.svelte';
+  import AppointmentCreate from '../../components/modals/appointment_modal/appointment_create.modal.svelte';
   import type { GetAllDoctorsType } from '../../types/services/doctor.types';
   import { get_all_doctors } from '../../services/doctor.service';
   import type { GetAllPatientType } from '../../types/services/patient.types';
   import { get_all_patients } from '../../services/patient.service';
-
+  import AppointmentUpdate from '../../components/modals/appointment_modal/appointment_update.modal.svelte';
+  import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
+  
   let isDarkMode: boolean;
+  let isLoading: boolean;
 
   let startDate = getStartOfWeek(new Date());
   let endDate = moment(startDate).add(6, 'days').toDate();
@@ -43,7 +45,7 @@
       criteria: (criteria as HTMLInputElement)?.value
     };
 
-    var result = await get_appointments_by_range(data);
+    let result = await get_appointments_by_range(data);
 
     appointments = await result.json();
   }
@@ -71,7 +73,7 @@
     day: number,
     hour: number
   ): boolean {
-    var currentAppointment = moment(appointment.date).add(
+    let currentAppointment = moment(appointment.date).add(
       appointment.start_time.substring(0, 2),
       'hours'
     );
@@ -83,14 +85,22 @@
   let patients: GetAllPatientType[] = [];
 
   async function executeAppointmentServices() {
+    isLoading = true;
+
     await getAllDoctors();
     await getAllPatients();
+
+    isLoading = false;
+  }
+
+  function handleModalSubmit() {
+    searchByRange();
   }
 
   async function getAllDoctors() {
     doctors = [];
 
-    var result = await get_all_doctors();
+    let result = await get_all_doctors();
 
     doctors = await result.json();
   }
@@ -98,7 +108,7 @@
   async function getAllPatients() {
     patients = [];
 
-    var result = await get_all_patients();
+    let result = await get_all_patients();
 
     patients = await result.json();
   }
@@ -106,6 +116,10 @@
 
 <main>
   <Sidebar bind:isDarkMode />
+
+  {#if (isLoading)}
+    <LoadingSpinner />
+  {/if}
 
   <div class="content {(isDarkMode && 'content-background-dark') || 'content-background-white'}">
     <div class="calendar-container">
@@ -135,7 +149,7 @@
               class="btn new-appointment"
               on:click={executeAppointmentServices}>Nova Consulta</button
             >
-            <AppointmentCreate bind:doctors bind:patients />
+            <AppointmentCreate on:submit={handleModalSubmit} bind:doctors bind:patients />
           </div>
         </div>
       </nav>
@@ -157,7 +171,8 @@
                 <span class="side-time">{moment(moment().date()).hour(hourIndex).format('H:mm')}</span>
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
-                    <Appointment appointmentInfo={appointment} />
+                    <div on:click={executeAppointmentServices} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-paid' : 'event-pending'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
+                    <AppointmentUpdate on:submit={handleModalSubmit} currentAppointmentId={appointment.id} bind:doctors bind:patients />
                   {/if}
                 {/each}
               </div>
@@ -218,9 +233,29 @@
     color: #fff;
   }
 
-  .export {
-    background-color: #007bff;
-    color: #fff;
+  .event-paid {
+      border-left: 3px solid #0056b3;
+  }
+
+  .event-pending {
+      border-left: 3px solid red;
+  }
+
+  .event {
+      cursor: pointer;
+      position: absolute;
+      top: 20%;
+      left: 5%;
+      width: 90%;
+      background-color: #e6f7ff;
+      color: #0056b3;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 4px;
+  }
+
+  .event:hover {
+      background-color: #a4dbf5;
   }
 
   .calendar-header {
