@@ -32,6 +32,14 @@ class AppointmentRepository:
         appointment.type = data.type
         appointment.start_time = data.start_time
         appointment.finish_time = data.finish_time
+        appointment.paid = data.paid
+        self.session.commit()
+        self.session.refresh(appointment)
+        return AppointmentResponse(**appointment.__dict__)
+
+    def disable(self, _id: int):
+        appointment = self.session.query(Appointment).filter_by(id=_id).first()
+        appointment.status = 1
         self.session.commit()
         self.session.refresh(appointment)
         return AppointmentResponse(**appointment.__dict__)
@@ -51,15 +59,17 @@ class AppointmentRepository:
             return self.session.query(Appointment).\
                 join(Patient, Appointment.patient_id == Patient.id).\
                 filter(
+                    Appointment.status == 0,
                     Appointment.date >= data.start_date,
                     Appointment.date <= data.end_date,
                     or_(
                         Appointment.title.like(search), 
-                        Patient.person.has(Person.name.like(search))  # Filtrando pelo nome usando a relação
+                        Patient.person.has(Person.name.like(search))
                     )
                 ).order_by(Appointment.date).all()
         else:
             return self.session.query(Appointment).filter(
+                Appointment.status == 0,
                 Appointment.date >= data.start_date,
                 Appointment.date <= data.end_date
             ).order_by(Appointment.date).all()

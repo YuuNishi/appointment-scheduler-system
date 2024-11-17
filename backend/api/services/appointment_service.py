@@ -23,6 +23,9 @@ class AppointmentService:
 
         return self.appointment_repository.update(data, appointment)
 
+    def disable(self, _id: int):
+        return self.appointment_repository.disable(_id)
+
     def get_by_id(self, _id: int):
         appointment = self.appointment_repository.get_by_id(_id)
 
