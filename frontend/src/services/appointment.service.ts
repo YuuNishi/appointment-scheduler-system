@@ -5,7 +5,7 @@ import type {
   GetByRangeType,
   UpdateAppointment
 } from '../types/services/appointment.types';
-import { get, post, put } from './core.service';
+import { get, post, put, remove } from './core.service';
 
 const ROUTE = "/appointments";
 
@@ -39,4 +39,10 @@ export const update_appointment = async (id: number, data: UpdateAppointment) =>
   const uri = ROUTE + "/" + id;
 
   return await put(uri, data);
+}
+
+export const delete_appointment = async (id: number) => {
+  const uri = ROUTE + "/" + id;
+
+  return await remove(uri);
 }

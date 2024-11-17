@@ -6,6 +6,9 @@
     import moment from 'moment';
     import ErrorToast from '../../toast/error_toast.svelte';
     import { create_appointment } from '../../../services/appointment.service';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   let showErrorToast: boolean;
   let toastError: string;
@@ -14,7 +17,6 @@
   let patients: GetAllPatientType[] = [];
 
   export { doctors, patients }
-
 
   let appointmentTitle: string;
   let appointmentType: number;
@@ -48,9 +50,11 @@
 
     try {
       await create_appointment(appointmentData);
+      dispatch('submit', { success: true });
     }
     catch {
       showToast(0, "Ocorreu um erro ao criar a consulta. Por favor, tente novamente.");
+      dispatch('submit', { success: false });
     }
   }
 

@@ -44,3 +44,11 @@ export const put = async (uri: string, body: any) => {
     body: JSON.stringify(convertNumbers(body))
   });
 }
+
+export const remove = async (uri: string) => {
+  const url = new URL(SERVER_URL + uri);
+
+  return await fetch(url, {
+    method: 'DELETE'
+  });
+}

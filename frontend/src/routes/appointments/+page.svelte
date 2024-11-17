@@ -13,8 +13,10 @@
   import type { GetAllPatientType } from '../../types/services/patient.types';
   import { get_all_patients } from '../../services/patient.service';
   import AppointmentUpdate from '../../components/modals/appointment_modal/appointment_update.modal.svelte';
-
+  import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
+  
   let isDarkMode: boolean;
+  let isLoading: boolean;
 
   let startDate = getStartOfWeek(new Date());
   let endDate = moment(startDate).add(6, 'days').toDate();
@@ -83,8 +85,16 @@
   let patients: GetAllPatientType[] = [];
 
   async function executeAppointmentServices() {
+    isLoading = true;
+
     await getAllDoctors();
     await getAllPatients();
+
+    isLoading = false;
+  }
+
+  function handleModalSubmit() {
+    searchByRange();
   }
 
   async function getAllDoctors() {
@@ -106,6 +116,11 @@
 
 <main>
   <Sidebar bind:isDarkMode />
+
+  {#if (isLoading)}
+    <LoadingSpinner />
+  {/if}
+
   <div class="content {(isDarkMode && 'content-background-dark') || 'content-background-white'}">
     <div class="calendar-container">
       <nav class="navbar">
@@ -134,7 +149,7 @@
               class="btn new-appointment"
               on:click={executeAppointmentServices}>Nova Consulta</button
             >
-            <AppointmentCreate bind:doctors bind:patients />
+            <AppointmentCreate on:submit={handleModalSubmit} bind:doctors bind:patients />
           </div>
         </div>
       </nav>
@@ -156,8 +171,8 @@
                 <span class="side-time">{moment(moment().date()).hour(hourIndex).format('H:mm')}</span>
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
-                    <div on:click={executeAppointmentServices} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-pending' : 'event-paid'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
-                    <AppointmentUpdate currentAppointmentId={appointment.id} bind:doctors bind:patients />
+                    <div on:click={executeAppointmentServices} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-paid' : 'event-pending'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
+                    <AppointmentUpdate on:submit={handleModalSubmit} currentAppointmentId={appointment.id} bind:doctors bind:patients />
                   {/if}
                 {/each}
               </div>

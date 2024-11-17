@@ -1,12 +1,15 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import 'iconify-icon';
   import moment from 'moment';
   import ErrorToast from '../../toast/error_toast.svelte';
-  import { get_appointment_by_id, update_appointment } from '../../../services/appointment.service';
+  import { delete_appointment, get_appointment_by_id, update_appointment } from '../../../services/appointment.service';
   import type { GetAllDoctorsType } from '../../../types/services/doctor.types';
   import type { GetAllPatientType } from '../../../types/services/patient.types';
   import type { GetByIdResponseType, UpdateAppointment } from '../../../types/services/appointment.types';
+
+  const dispatch = createEventDispatcher();
 
   let modalElement: HTMLElement;
 
@@ -38,7 +41,8 @@
       professionalId != null &&
       patientId != null &&
       dateTime &&
-      finishTime
+      finishTime &&
+      paidType != null
     );
   }
 
@@ -58,8 +62,20 @@
 
     try {
       await update_appointment(currentAppointmentId, appointmentData);
+      dispatch('submit', { success: true });
     } catch {
       showToast(0, 'Ocorreu um erro ao atualizar a consulta. Por favor, tente novamente.');
+      dispatch('submit', { success: false });
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await delete_appointment(currentAppointmentId);
+      dispatch('submit', { success: true });
+    } catch {
+      showToast(0, 'Ocorreu um erro ao deletar a consulta. Por favor, tente novamente.');
+      dispatch('submit', { success: false });
     }
   }
 
@@ -196,6 +212,22 @@
             </select>
           </div>
 
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="payment">
+                <iconify-icon icon="ion:card-outline" width="26" height="26" />
+              </label>
+            </div>
+            <select class="form-select" id="payment"
+                    bind:value={paidType}
+                    on:input={validateForm}
+            >
+              <option value="" disabled>Status do pagamento</option>
+              <option value={0}>Pagamento Pendente</option>
+              <option value={1}>Pagamento Realizado</option>
+            </select>
+          </div>
+
           <div class="mb-3">
             <label for="dateTime" class="form-label"><i class="bi bi-calendar"></i> Data e Hora da consulta</label>
             <input type="datetime-local" class="form-control" id="dateTime"
@@ -219,6 +251,9 @@
       </div>
 
       <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger ms-2" data-bs-dismiss="modal" on:click={handleDelete}>
+          <iconify-icon icon="game-icons:trash-can" width="1.2rem" height="1.2rem"/>
+        </button>
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" on:click={handleSubmit} disabled={!isFormValid}>Salvar</button>
       </div>
