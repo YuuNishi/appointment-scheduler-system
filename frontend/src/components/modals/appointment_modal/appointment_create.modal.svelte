@@ -1,11 +1,11 @@
 <script lang="ts">
   import 'iconify-icon';
-    import type { GetAllDoctorsType } from '../../types/services/doctor.types';
-    import type { GetAllPatientType } from '../../types/services/patient.types';
-    import type { CreateAppointment } from '../../types/services/appointment.types';
+    import type { GetAllDoctorsType } from '../../../types/services/doctor.types';
+    import type { GetAllPatientType } from '../../../types/services/patient.types';
+    import type { CreateAppointment } from '../../../types/services/appointment.types';
     import moment from 'moment';
-    import ErrorToast from '../toast/error_toast.svelte';
-    import { create_appointment } from '../../services/appointment.service';
+    import ErrorToast from '../../toast/error_toast.svelte';
+    import { create_appointment } from '../../../services/appointment.service';
 
   let showErrorToast: boolean;
   let toastError: string;

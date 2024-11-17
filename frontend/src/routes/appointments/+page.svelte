@@ -7,12 +7,12 @@
     GetByRangeResponseType,
     GetByRangeType
   } from '../../types/services/appointment.types';
-  import AppointmentCreate from '../../components/appointment/appointment_create.modal.svelte';
+  import AppointmentCreate from '../../components/modals/appointment_modal/appointment_create.modal.svelte';
   import type { GetAllDoctorsType } from '../../types/services/doctor.types';
   import { get_all_doctors } from '../../services/doctor.service';
   import type { GetAllPatientType } from '../../types/services/patient.types';
   import { get_all_patients } from '../../services/patient.service';
-  import AppointmentUpdate from '../../components/appointment/appointment_update.modal.svelte';
+  import AppointmentUpdate from '../../components/modals/appointment_modal/appointment_update.modal.svelte';
 
   let isDarkMode: boolean;
 
@@ -106,7 +106,6 @@
 
 <main>
   <Sidebar bind:isDarkMode />
-
   <div class="content {(isDarkMode && 'content-background-dark') || 'content-background-white'}">
     <div class="calendar-container">
       <nav class="navbar">

@@ -2,11 +2,11 @@
   import { onDestroy, onMount } from 'svelte';
   import 'iconify-icon';
   import moment from 'moment';
-  import ErrorToast from '../toast/error_toast.svelte';
-  import { get_appointment_by_id, update_appointment } from '../../services/appointment.service';
-  import type { GetAllDoctorsType } from '../../types/services/doctor.types';
-  import type { GetAllPatientType } from '../../types/services/patient.types';
-  import type { GetByIdResponseType, UpdateAppointment } from '../../types/services/appointment.types';
+  import ErrorToast from '../../toast/error_toast.svelte';
+  import { get_appointment_by_id, update_appointment } from '../../../services/appointment.service';
+  import type { GetAllDoctorsType } from '../../../types/services/doctor.types';
+  import type { GetAllPatientType } from '../../../types/services/patient.types';
+  import type { GetByIdResponseType, UpdateAppointment } from '../../../types/services/appointment.types';
 
   let modalElement: HTMLElement;
 
