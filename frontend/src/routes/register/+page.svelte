@@ -21,7 +21,7 @@
           <label for="name">Nome:</label>
         </div>
         <div class="col-md-6">
-          <input id="name" name="name" class="form-control"/>
+          <input id="name" name="name" required class="form-control"/>
         </div>
       </div>
       
@@ -30,7 +30,7 @@
           <label for="cpf">CPF:</label>
         </div>
         <div class="col-md-2">
-          <input use:imask={options.cpf} name="cpf" class="form-control" type="text" id="cpf" placeholder="___.___.___-__"/>
+          <input use:imask={options.cpf} name="cpf" required class="form-control" type="text" id="cpf" placeholder="___.___.___-__"/>
         </div>
       </div>
 
@@ -39,7 +39,7 @@
           <label for="birthdate">Data Nascimento:</label>
         </div>
         <div class="col-md-2">
-          <input use:imask={options.date} class="form-control" type="text" name="birthdate" id="birthdate" placeholder="__/__/____"/>
+          <input use:imask={options.date} class="form-control" required type="text" name="birthdate" id="birthdate" placeholder="__/__/____"/>
         </div>
       </div>
 
@@ -48,7 +48,7 @@
           <label for="gender">Sexo:</label>
         </div>
         <div class="col-md-2">
-          <select id="gender" name="gender" class="form-control">
+          <select id="gender" name="gender" required class="form-control">
             <option value="default">Selecione</option>
             <option value=0>Masculino</option>
             <option value=1>Feminino</option>
@@ -62,7 +62,7 @@
           <label for="cep">CEP:</label>
         </div>
         <div class="col-md-2">
-          <input use:imask={options.cep} id="cep" name="cep" class="form-control" placeholder="_____-__"/>
+          <input use:imask={options.cep} id="cep" name="cep" required class="form-control" placeholder="_____-__"/>
         </div>
       </div>
 
@@ -71,13 +71,13 @@
           <label for="street">Rua:</label>
         </div>
         <div class="col-md-6">
-          <input id="street" name="street" class="form-control"/>
+          <input id="street" name="street" required class="form-control"/>
         </div>
         <div class="col-auto">
           <label for="number">Número:</label> 
         </div>
         <div class="col-md-2 ">
-          <input id="number" type="number" name="number" class="form-control"/>
+          <input id="number" type="number" required name="number" class="form-control"/>
         </div>
       </div>
 
@@ -86,7 +86,7 @@
           <label for="neighborhood">Bairro:</label> 
         </div>
         <div class="col-md-6">
-          <input id="neighborhood" name="neighborhood" type="text" class="form-control"/>
+          <input id="neighborhood" name="neighborhood" required type="text" class="form-control"/>
         </div>
       </div>
 
@@ -95,13 +95,13 @@
           <label for="city">Cidade:</label>
         </div>
         <div class="col-md-4">
-          <input id="city" name="city" type="text" class="form-control"/>
+          <input id="city" name="city" type="text" required class="form-control"/>
         </div>
         <div class="col-auto">
           <label for="state">Estado:</label>
         </div>
         <div class="col-md-auto">
-          <select id="state" name="state" class="form-control">
+          <select id="state" name="state" required class="form-control">
             <option value="default">Selecione</option>
             <option value='rj'>Feminino</option>
             <option value='sp'>Masculino</option>
@@ -111,7 +111,9 @@
 
       <div class="row">
         <div class="col align-self-end">
-          <button type="button" class="btn btn-default btn-outline" >Voltar sem salvar</button>
+          <a href="/patients">
+            <button type="button" class="btn btn-default btn-outline" >Voltar sem salvar</button>
+          </a>
           <button class="btn btn-success" type="submit">Salvar</button>
         </div>
       </div>

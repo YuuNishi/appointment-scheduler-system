@@ -17,7 +17,7 @@ export const actions = {
           let add_id 
           await fetch('http://127.0.0.1:8000/api/address/',{
             method: 'POST',
-            headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxNTYxNDE5fQ.LS8M3-q66JhZ_rMAR2CJ6-i5sonV4dE42HqO2PL68Nk','Content-Type': 'application/json'},
+            headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxOTk4NTgwfQ.4ce82rlEbEBVbbB-Yx4gxJCW-I-wQ6b4uR2_kU-6k4A','Content-Type': 'application/json'},
             body: JSON.stringify(address)
           }).then(resp=>resp.json()).then(data=>{add_id =data.id ;})
           return add_id
@@ -27,14 +27,14 @@ export const actions = {
         let patient = {name:general.get('name'),
           status: 1,
           sex:parseInt(general.get('gender')),
-          birth_date:"2024-11-11", 
+          birth_date:general.get('birthdate').split("/").reverse().join("-"),  
           cpf:general.get('cpf'),
           address_id:id
         }
         async function addPatient(patient) {
           const response2 = fetch('http://127.0.0.1:8000/api/patient/',{
           method: 'POST',
-          headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxNTYxNDE5fQ.LS8M3-q66JhZ_rMAR2CJ6-i5sonV4dE42HqO2PL68Nk','Content-Type': 'application/json'},
+          headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxOTk4NTgwfQ.4ce82rlEbEBVbbB-Yx4gxJCW-I-wQ6b4uR2_kU-6k4A','Content-Type': 'application/json'},
           body: JSON.stringify(patient)
           })
         }
