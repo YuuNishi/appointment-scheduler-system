@@ -1,36 +1,35 @@
-<script>
-  import { onMount } from 'svelte';
+<script lang="ts">
   import 'iconify-icon';
+  import { create_token } from '../../services/token.service.js';
+  import type { CreateTokenType } from '../../types/services/token.types.js';
+  import { goto } from '$app/navigation';
+  import { setCookie } from '../../utils/cookies.utils';
+  import moment from 'moment';
 
   let email = '';
   let password = '';
-  let token = null;
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
 
-    const response = await fetch('http://localhost:8001/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
+    const request: CreateTokenType = {
+      email,
+      password
+    }
+
+    const response = await create_token(request);
 
     if (response.ok) {
-      const data = await response.json();
+      const { token } = await response.json();
 
-      token = data.token;
-      localStorage.setItem('token', token);
-      window.location.href = '../appointments';
+      setCookie("token", token, 1);
+      setCookie("token_create", moment.utc().toISOString(), 1);
+
+      await goto('/appointments');
     } else {
       console.error('Erro de autenticação');
     }
   }
-
-  onMount(() => {
-    token = localStorage.getItem('token');
-  });
 </script>
 
 <div class="login-container">

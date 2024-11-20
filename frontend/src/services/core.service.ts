@@ -1,4 +1,20 @@
+import { getCookie } from '../utils/cookies.utils';
+
 const SERVER_URL = "http://localhost:8000/api"
+
+const createHeaders = () => {
+  const headers = new Headers()
+
+  headers.append("Content-Type", "application/json")
+
+  const token = getCookie("token")
+
+  if (token) {
+    headers.append("Authorization", `Bearer ${token}`)
+  }
+
+  return headers
+}
 
 const convertNumbers = (obj: any) : any => {
   if (Array.isArray(obj)) {
@@ -22,7 +38,10 @@ export const get = async (uri: string, params: URLSearchParams | null = null) =>
     query = "?" + params
   }
 
-  return await fetch(url + query); 
+  return await fetch(url + query, {
+    method: "GET",
+    headers: createHeaders()
+  });
 }
 
 export const post = async (uri: string, body: any) => {
@@ -30,8 +49,18 @@ export const post = async (uri: string, body: any) => {
 
   return await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: createHeaders(),
     body: JSON.stringify(convertNumbers(body))
+  });
+}
+
+export const post_literal = async (uri: string, body: any) => {
+  const url = new URL(SERVER_URL + uri);
+
+  return await fetch(url, {
+    method: 'POST',
+    headers: createHeaders(),
+    body: JSON.stringify(body)
   });
 }
 
@@ -40,7 +69,7 @@ export const put = async (uri: string, body: any) => {
 
   return await fetch(url, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: createHeaders(),
     body: JSON.stringify(convertNumbers(body))
   });
 }
@@ -49,6 +78,7 @@ export const remove = async (uri: string) => {
   const url = new URL(SERVER_URL + uri);
 
   return await fetch(url, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: createHeaders()
   });
 }

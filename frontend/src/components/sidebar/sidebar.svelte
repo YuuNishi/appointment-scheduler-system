@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import 'iconify-icon';
   import UserAvatar from '$lib/assets/placeholder_user.png';
+  import { deleteCookie } from '../../utils/cookies.utils';
 
   let activePage = $page.url.pathname;
   let isDarkMode : boolean;
@@ -57,7 +58,10 @@
     </li>
   </ul>
   <hr style="color: {(isDarkMode && 'white') || 'black'}"/>
-  <a href="/leave" class="nav-link {isDarkMode && 'text-white'} d-flex align-items-center">
+  <a on:click={() => {
+    deleteCookie("token");
+    deleteCookie("token_create");
+  }} href="/login" class="nav-link {isDarkMode && 'text-white'} d-flex align-items-center">
     <iconify-icon icon="dashicons:exit" width="28" height="28" class="me-2" />
     Sair
   </a>
