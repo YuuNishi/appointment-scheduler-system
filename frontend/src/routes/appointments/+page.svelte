@@ -14,8 +14,8 @@
   import { get_all_patients } from '../../services/patient.service';
   import AppointmentUpdate from '../../components/modals/appointment_modal/appointment_update.modal.svelte';
   import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
-  
-  let isDarkMode: boolean;
+  import { isDarkTheme } from '../../store/theme.store';
+
   let isLoading: boolean;
 
   let startDate = getStartOfWeek(new Date());
@@ -115,13 +115,13 @@
 </script>
 
 <main>
-  <Sidebar bind:isDarkMode />
+  <Sidebar />
 
   {#if (isLoading)}
     <LoadingSpinner />
   {/if}
 
-  <div class="content {(isDarkMode && 'content-background-dark') || 'content-background-white'}">
+  <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
     <div class="calendar-container">
       <nav class="navbar">
         <div class="navbar-content">

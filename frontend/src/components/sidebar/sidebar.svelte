@@ -1,22 +1,17 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import { page } from '$app/stores';
   import 'iconify-icon';
   import UserAvatar from '$lib/assets/placeholder_user.png';
   import { deleteCookie } from '../../utils/cookies.utils';
+  import { isDarkTheme } from '../../store/theme.store';
 
   let activePage = $page.url.pathname;
-  let isDarkMode : boolean;
-
-  export { isDarkMode }
-
-  onMount(() => (isDarkMode = false));
 </script>
 
-<div class="sidebar flex-column flex-shrink-0 p-3 {(isDarkMode && 'text-white' && 'bg-dark') || ('bg-white')}">
+<div class="sidebar flex-column flex-shrink-0 p-3 {($isDarkTheme && 'text-white' && 'bg-dark') || ('bg-white')}">
   <div class="dropdown">
     <a
-      class="d-flex align-items-center {isDarkMode && 'text-white'} text-decoration-none dropdown-toggle"
+      class="d-flex align-items-center {$isDarkTheme && 'text-white'} text-decoration-none dropdown-toggle"
       id="dropdownUser"
       data-bs-toggle="dropdown"
       aria-expanded="false"
@@ -36,7 +31,7 @@
           <label class="form-check-label me-2" for="flexSwitchCheckChecked">
             Tema escuro
           </label>
-          <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" bind:checked={isDarkMode} />
+          <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" bind:checked={$isDarkTheme} />
         </div>
       </li>
       <li><a class="dropdown-item" href="/settings">Configurações</a></li>
@@ -45,23 +40,23 @@
   <hr />
   <ul class="nav nav-pills flex-column mb-auto gap-1">
     <li>
-      <a href="/appointments" class="nav-link {(activePage == '/appointments' && 'active') || 'hover-link'} {isDarkMode && 'text-white'} d-flex align-items-center" aria-current="page">
+      <a href="/appointments" class="nav-link {(activePage == '/appointments' && 'active') || 'hover-link'} {$isDarkTheme && 'text-white'} d-flex align-items-center" aria-current="page">
         <iconify-icon icon="mdi:calendar-outline" width="28" height="28" class="me-2" />
         Agendamento
       </a>
     </li>
     <li>
-      <a href="/records" class="nav-link {(activePage == '/records' && 'active') || 'hover-link' } {isDarkMode && 'text-white'} d-flex align-items-center">
+      <a href="/records" class="nav-link {(activePage == '/records' && 'active') || 'hover-link' } {$isDarkTheme && 'text-white'} d-flex align-items-center">
         <iconify-icon icon="cuida:user-add-outline" width="28" height="28" class="me-2" />
         Prontuários
       </a>
     </li>
   </ul>
-  <hr style="color: {(isDarkMode && 'white') || 'black'}"/>
+  <hr style="color: {($isDarkTheme && 'white') || 'black'}"/>
   <a on:click={() => {
     deleteCookie("token");
     deleteCookie("token_create");
-  }} href="/login" class="nav-link {isDarkMode && 'text-white'} d-flex align-items-center">
+  }} href="/login" class="nav-link {$isDarkTheme && 'text-white'} d-flex align-items-center">
     <iconify-icon icon="dashicons:exit" width="28" height="28" class="me-2" />
     Sair
   </a>
