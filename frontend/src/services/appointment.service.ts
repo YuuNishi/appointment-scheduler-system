@@ -1,7 +1,6 @@
 import moment from "moment";
 import type {
   CreateAppointment,
-  GetByIdResponseType,
   GetByRangeType,
   UpdateAppointment
 } from '../types/services/appointment.types';

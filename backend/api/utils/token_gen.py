@@ -33,6 +33,7 @@ class TokenUtils:
             decoded_token = TokenData(**payload)
             if datetime.now(UTC) > decoded_token.exp:
                 raise HTTPException(status_code=401, detail='Token expirado')
+
             return decoded_token
 
         except jwt.InvalidTokenError:
