@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from repositories.user_repository import UserRepository
 from schemas.token_schema import TokenInput, TokenResponse, KeepAliveTokenInput
 from utils.token_gen import TokenUtils
-from datetime import datetime, UTC
 
 class TokenService:
     def __init__(self, session: Session):
@@ -20,7 +19,7 @@ class TokenService:
         else:
             raise HTTPException(status_code=404, detail='E-mail e/ou senha incorretos')
 
-        return TokenResponse(token=token)
+        return TokenResponse(token=token, username=user.username)
 
     def keep_alive(self, data: KeepAliveTokenInput):
         credentials = HTTPAuthorizationCredentials(scheme="", credentials=data.token)
@@ -33,4 +32,4 @@ class TokenService:
         else:
             raise HTTPException(status_code=401, detail='Token inválido')
 
-        return TokenResponse(token=token)
+        return TokenResponse(token=token, username=user.username)

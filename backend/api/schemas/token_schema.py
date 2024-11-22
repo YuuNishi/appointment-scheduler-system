@@ -12,6 +12,7 @@ class KeepAliveTokenInput(BaseModel):
 
 class TokenResponse(BaseModel):
     token: str
+    username: str
 
 class TokenData(BaseModel):
     id: uuid.UUID

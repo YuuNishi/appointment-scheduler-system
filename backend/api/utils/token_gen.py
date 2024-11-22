@@ -38,3 +38,16 @@ class TokenUtils:
 
         except jwt.InvalidTokenError:
             raise HTTPException(status_code=401, detail='Token inválido')
+
+    @staticmethod
+    def decoded_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+        token = credentials.credentials
+
+        try:
+            payload = jwt.decode(token, settings.token_secret, algorithms=['HS256'])
+            decoded_token = TokenData(**payload)
+
+            return decoded_token
+
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=401, detail='Token inválido')
