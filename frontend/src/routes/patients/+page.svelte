@@ -41,7 +41,7 @@ function search() {
 }
 ///
 let isSorted = false
-function sortTable(patients) {
+function sortTable() {
   if(!isSorted){
     patients.sort((a, b) => a.name.localeCompare(b.name))
     location.replace(location.href)
@@ -61,17 +61,11 @@ function sortTable(patients) {
 
   
   let chunks = [];
-
-// Loop to split array into chunks
   for (let i = 0; i < patients.length; i += 10) {
     let chunk = [];
-    
-    // Iterate for the size of chunk
     for (let j = i; j < i + 10 && j < patients.length; j++) {
         chunk.push(patients[j]);
     }
-    
-    // push the chunk to output array
     chunks.push(chunk);
 }
 </script>
@@ -91,7 +85,7 @@ function sortTable(patients) {
     <div class="results">
       <div class="text-right">
         <button class="btn " >
-          <iconify-icon on:click={sortTable()} icon="bi:filter" width="1.8em" height="1.8em" class="icon"></iconify-icon>
+          <iconify-icon  icon="bi:filter" width="1.8em" height="1.8em" class="icon"></iconify-icon>
         </button>
         <a href="/register">
           <button class="btn btn-success">Novo Paciente</button>
