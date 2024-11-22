@@ -7,6 +7,35 @@
     cpf: '000.000.000-00',
     cep: '00000-000'
 	};
+  const estates= [{nome:'Acre', sigla:'AC'},
+{nome:'Alagoas', sigla:'AL'},
+{nome:'Amapá', sigla:'AP'},
+{nome:'Amazonas', sigla:'AM'},
+{nome:'Bahia', sigla:'BA'},
+{nome:'Ceará', sigla:'CE'},
+{nome:'Espírito Santo', sigla:'ES'},
+{nome:'Goiás', sigla:'GO'},
+{nome:'Maranhão', sigla:'MA'},
+{nome:'Mato Grosso', sigla:'MT'},
+{nome:'Mato Grosso do Sul', sigla:'MS'},
+{nome:'Minas Gerais', sigla:'MG'},
+{nome:'Pará', sigla:'PA'},
+{nome:'Paraíba', sigla:'PB'},
+{nome:'Paraná', sigla:'PR'},
+{nome:'Pernambuco', sigla:'PE'},
+{nome:'Piauí', sigla:'PI'},
+{nome:'Rio de Janeiro', sigla:'RJ'},
+{nome:'Rio Grande do Norte', sigla:'RN'},
+{nome:'Rio Grande do Sul', sigla:'RS'},
+{nome:'Rondônia', sigla:'RO'},
+{nome:'Roraima', sigla:'RR'},
+{nome:'Santa Catarina', sigla:'SC'},
+{nome:'São Paulo', sigla:'SP'},
+{nome:'Sergipe', sigla:'SE'},
+{nome:'Tocantins', sigla:'TO'},
+{nome:'Distrito Federal', sigla:'DF'}
+]
+
 
 </script>
 
@@ -49,7 +78,7 @@
         </div>
         <div class="col-md-2">
           <select id="gender" name="gender" required class="form-control">
-            <option value="default">Selecione</option>
+            <option value="" selected disabled hidden >Selecione</option>
             <option value=0>Masculino</option>
             <option value=1>Feminino</option>
           </select> 
@@ -102,9 +131,10 @@
         </div>
         <div class="col-md-auto">
           <select id="state" name="state" required class="form-control">
-            <option value="default">Selecione</option>
-            <option value='rj'>Feminino</option>
-            <option value='sp'>Masculino</option>
+            <option value="" selected disabled hidden >Selecione</option>
+            {#each estates as estate}
+              <option value={estate.sigla}>{estate.nome}</option>
+            {/each}
           </select> 
         </div>
       </div>
@@ -148,5 +178,12 @@
     display: inline-block;
     width: 150px;
     text-align: right;;
+  }
+  .btn-default{
+    border-color: black;
+  }
+  .btn-default:hover {
+    background-color:#dfdede;
+    transition: 0.7s;
   }
 </style>
