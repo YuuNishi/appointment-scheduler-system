@@ -1,5 +1,4 @@
 <script>
-    import Form from "../../components/formedit/form.svelte";
     import { imask } from "@imask/svelte";
     export let edit, values
     export let pat = JSON.stringify(values.person)
