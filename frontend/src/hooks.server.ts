@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import { keep_alive_token } from './services/token.service';
 import type { TokenResponse } from './types/services/token.types';
 import moment from 'moment';
+import { userInformation } from './store/user.store';
 
 const public_paths = ['/login'];
 
@@ -41,7 +42,14 @@ export const handle = async ({ event, resolve }) => {
       const keepAliveResponse = await keep_alive_token({ token });
 
       if (keepAliveResponse.ok) {
-        const data: TokenResponse = await keepAliveResponse.json();
+        let data: TokenResponse;
+
+        try {
+          data = await keepAliveResponse.json();
+        }
+        catch {
+          throw redirect(302, '/login');
+        }
 
         const expDate = moment.utc().add(1, 'hour');
 
@@ -57,6 +65,15 @@ export const handle = async ({ event, resolve }) => {
           httpOnly: false
         });
       } else {
+        event.cookies.delete('token', {
+          path: '/',
+          httpOnly: false
+        });
+        event.cookies.delete('token_create', {
+          path: '/',
+          httpOnly: false
+        });
+
         if (url.pathname != '/login') {
           throw redirect(302, '/login');
         }

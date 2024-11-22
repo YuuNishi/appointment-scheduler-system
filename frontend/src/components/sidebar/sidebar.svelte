@@ -4,6 +4,7 @@
   import UserAvatar from '$lib/assets/placeholder_user.png';
   import { deleteCookie } from '../../utils/cookies.utils';
   import { isDarkTheme } from '../../store/theme.store';
+  import { userInformation } from '../../store/user.store';
 
   let activePage = $page.url.pathname;
 </script>
@@ -17,13 +18,13 @@
       aria-expanded="false"
     >
       <img
-        src={UserAvatar}
+        src={$userInformation.avatar}
         alt="user"
         width="32"
         height="32"
         class="rounded-circle me-2"
       />
-      <strong>Usuário</strong>
+      <strong>{$userInformation.username}</strong>
     </a>
     <ul class="dropdown dropdown-menu dropdown-menu-dark text-small shadow w-100 " aria-labelledby="dropdownUser">
       <li>

@@ -6,6 +6,7 @@
   import { setCookie } from '../../utils/cookies.utils';
   import moment from 'moment';
   import ErrorToast from '../../components/toast/error_toast.svelte';
+  import { userInformation } from '../../store/user.store';
 
   let showErrorToast: boolean;
   let toastError: string;
@@ -24,10 +25,14 @@
     try {
       const response = await create_token(request);
       if (response.ok) {
-        const { token } = await response.json();
+        const { token, username } = await response.json();
 
         setCookie('token', token, 1);
         setCookie('token_create', moment.utc().toISOString(), 1);
+
+        if (username) {
+          $userInformation.username = username;
+        }
 
         await goto('/appointments');
       }
