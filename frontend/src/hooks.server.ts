@@ -1,8 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import { keep_alive_token } from './services/token.service';
 import type { TokenResponse } from './types/services/token.types';
-import moment from 'moment';
-import { userInformation } from './store/user.store';
+import moment from 'moment'
 
 const public_paths = ['/login'];
 

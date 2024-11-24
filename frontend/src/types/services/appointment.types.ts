@@ -28,7 +28,6 @@ export type GetByRangeResponseType = {
 export type CreateAppointment = {
   patient_id: number
   doctor_ids: number[]
-  created_by: string
   title: string
   date: string
   start_time: string

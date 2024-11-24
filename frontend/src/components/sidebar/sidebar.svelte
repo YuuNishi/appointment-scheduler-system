@@ -1,12 +1,34 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import 'iconify-icon';
-  import UserAvatar from '$lib/assets/placeholder_user.png';
   import { deleteCookie } from '../../utils/cookies.utils';
   import { isDarkTheme } from '../../store/theme.store';
   import { userInformation } from '../../store/user.store';
+  import { onMount } from 'svelte';
+  import { get_user_information } from '../../services/user.service';
+  import { redirect } from '@sveltejs/kit';
+  import { get_avatar_by_enum } from '../../utils/avatar.utils';
 
   let activePage = $page.url.pathname;
+
+  onMount(async () => {
+    try {
+      let data = await get_user_information();
+
+      if (data.ok) {
+        let jsonData = await data.json();
+
+        $userInformation.username = jsonData.username;
+        $userInformation.avatar = get_avatar_by_enum(jsonData.avatar);
+      }
+      else {
+        redirect(302, "/login");
+      }
+    }
+    catch {
+      redirect(302, "/login");
+    }
+  });
 </script>
 
 <div class="sidebar flex-column flex-shrink-0 p-3 {($isDarkTheme && 'text-white' && 'bg-dark') || ('bg-white')}">

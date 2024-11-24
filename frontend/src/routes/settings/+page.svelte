@@ -2,8 +2,18 @@
   import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
   import Sidebar from '../../components/sidebar/sidebar.svelte';
   import { isDarkTheme } from '../../store/theme.store';
+  import Breadcrumb from '../../components/breadcrumb/breadcrumb.svelte';
+  import type { BreadCrumbItemType } from '../../types/services/shared.types';
 
   let isLoading: boolean;
+
+  let breadCrumbItems: BreadCrumbItemType[] = [
+    {
+      route: "settings",
+      title: "configurações",
+      active: true
+    }
+  ]
 </script>
 
 <main>
@@ -14,6 +24,8 @@
   {/if}
 
   <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
+    <Breadcrumb breadCrumbItems={breadCrumbItems} />
+
     <h1 class="mb-3">Configurações</h1>
 
     <div class="d-flex gap-2">
