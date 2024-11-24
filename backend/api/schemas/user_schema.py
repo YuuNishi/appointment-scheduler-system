@@ -2,6 +2,8 @@ import uuid
 
 from pydantic import BaseModel, EmailStr, Field
 
+from models.enums import UserAvatarEnum
+
 class UserInput(BaseModel):
     email: EmailStr = Field(max_length=100)
     username: str = Field(min_length=10, max_length=100)
@@ -10,13 +12,13 @@ class UserInput(BaseModel):
 class UsernameInput(BaseModel):
     username: str = Field(min_length=10, max_length=100)
 
+class UserAvatarInput(BaseModel):
+    avatar: UserAvatarEnum
+
 class UserPasswordInput(BaseModel):
     oldPassword: str = Field(min_length=8, max_length=30)
     newPassword: str = Field(min_length=8, max_length=30)
 
-class UserInfoResponse(BaseModel):
-    id: uuid.UUID
-    username: str
-
 class UserResponse(BaseModel):
     username: str
+    avatar: UserAvatarEnum

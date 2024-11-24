@@ -3,6 +3,8 @@ import uuid
 import bcrypt
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
+
+from models.enums import UserAvatarEnum
 from models.user import User
 from schemas.user_schema import UserInput, UserResponse
 
@@ -37,6 +39,14 @@ class UserRepository:
 
     def update_username(self, user: User, username: str) -> UserResponse:
         user.username = username
+
+        self.session.commit()
+        self.session.refresh(user)
+
+        return UserResponse(**user.__dict__)
+
+    def update_avatar(self, user: User, avatar: UserAvatarEnum) -> UserResponse:
+        user.avatar = avatar
 
         self.session.commit()
         self.session.refresh(user)
