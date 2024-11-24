@@ -1,7 +1,9 @@
+import uuid
 from http.client import HTTPException
 
 from sqlalchemy.orm import Session
 from repositories.appointment_repository import AppointmentRepository
+from repositories.user_repository import UserRepository
 from schemas.appointment_schema import AppointmentInput, AppointmentResponse, AppointmentByRangeInput, \
     AppointmentByRangeResponse, AppointmentUpdateInput, AppointmentByIdResponse
 
@@ -10,9 +12,16 @@ class AppointmentService:
     def __init__(self, session: Session):
         self.repository= session
         self.appointment_repository = AppointmentRepository(session)
-    
-    def create(self, data: AppointmentInput):
-        appointment = self.appointment_repository.create(data, data.doctor_ids)
+        self.user_repository = UserRepository(session)
+
+    def create(self, _userId: uuid.UUID, data: AppointmentInput):
+        user = self.user_repository.get_by_id(_userId)
+
+        if bool(user):
+            appointment = self.appointment_repository.create(data, data.doctor_ids, user.username)
+        else:
+            raise HTTPException(status_code=404, detail='Usuário não encontrado')
+
         return AppointmentResponse(**appointment.model_dump(exclude_none=True))
 
     def update(self, _id: int, data: AppointmentUpdateInput):
