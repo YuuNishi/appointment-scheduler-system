@@ -13,9 +13,10 @@ class AppointmentRepository:
     def __init__(self, session: Session):
         self.session = session
         
-    def create(self, data: AppointmentInput, doctor_ids: list[int])-> AppointmentResponse:
+    def create(self, data: AppointmentInput, doctor_ids: list[int], username: str)-> AppointmentResponse:
         appointment = Appointment(**data.model_dump(exclude_none=True, exclude={"doctor_ids"}))
-        
+        appointment.created_by = username
+
         doctors = self.session.query(Doctor).filter(Doctor.id.in_(doctor_ids)).all()
         appointment.doctors = doctors
         

@@ -7,7 +7,6 @@ from models.enums import AppointmentTypeEnum, PaidEnum
 class AppointmentInput(BaseModel):
     patient_id: int
     doctor_ids: List[int]
-    created_by: str = Field(min_length=10, max_length=100)
     title: str = Field(min_length=10, max_length=100)
     date: date
     start_time: time

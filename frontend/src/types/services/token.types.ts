@@ -9,4 +9,5 @@ export type KeepAliveTokenType = {
 
 export type TokenResponse = {
   token: string;
+  username: string;
 }

@@ -38,7 +38,6 @@
     const appointmentData: CreateAppointment = {
       title: appointmentTitle,
       type: appointmentType,
-      created_by: 'mock-user12344',
       doctor_ids: [
         professionalId
       ],

@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from database.database import get_db
 from schemas.secretary_schema import SecretaryResponse, SecretaryInput
 from services.secretary_service import Secretary_Service
-from models.secretary import Secretary
 
 router = APIRouter(prefix="/secretary", tags=["secretary"])
 

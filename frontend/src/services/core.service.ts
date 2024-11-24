@@ -74,6 +74,26 @@ export const put = async (uri: string, body: any) => {
   });
 }
 
+export const patch = async (uri: string, body: any) => {
+  const url = new URL(SERVER_URL + uri);
+
+  return await fetch(url, {
+    method: 'PATCH',
+    headers: createHeaders(),
+    body: JSON.stringify(convertNumbers(body))
+  });
+}
+
+export const patch_literal = async (uri: string, body: any) => {
+  const url = new URL(SERVER_URL + uri);
+
+  return await fetch(url, {
+    method: 'PATCH',
+    headers: createHeaders(),
+    body: JSON.stringify(body)
+  });
+}
+
 export const remove = async (uri: string) => {
   const url = new URL(SERVER_URL + uri);
 

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import moment from 'moment'
   import Sidebar from '../../components/sidebar/sidebar.svelte';
+  import Breadcrumb from '../../components/breadcrumb/breadcrumb.svelte';
   import { get_appointments_by_range } from '../../services/appointment.service';
   import type {
     GetByRangeResponseType,
@@ -14,9 +15,18 @@
   import { get_all_patients } from '../../services/patient.service';
   import AppointmentUpdate from '../../components/modals/appointment_modal/appointment_update.modal.svelte';
   import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
-  
-  let isDarkMode: boolean;
+  import { isDarkTheme } from '../../store/theme.store';
+  import type { BreadCrumbItemType } from '../../types/services/shared.types';
+
   let isLoading: boolean;
+
+  let breadCrumbItems: BreadCrumbItemType[] = [
+    {
+      route: "/appointments",
+      title: "agendamento",
+      active: true
+    }
+  ]
 
   let startDate = getStartOfWeek(new Date());
   let endDate = moment(startDate).add(6, 'days').toDate();
@@ -115,13 +125,14 @@
 </script>
 
 <main>
-  <Sidebar bind:isDarkMode />
+  <Sidebar />
 
   {#if (isLoading)}
     <LoadingSpinner />
   {/if}
 
-  <div class="content {(isDarkMode && 'content-background-dark') || 'content-background-white'}">
+  <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
+    <Breadcrumb breadCrumbItems={breadCrumbItems} />
     <div class="calendar-container">
       <nav class="navbar">
         <div class="navbar-content">
