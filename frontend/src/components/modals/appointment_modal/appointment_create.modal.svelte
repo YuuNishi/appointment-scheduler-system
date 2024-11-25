@@ -54,7 +54,7 @@
     try {
       await create_appointment(appointmentData);
       dispatch('submit', { success: true });
-      showToastSuccess(1, "Consulta Criada com Sucesso")
+      showToast(1, "Consulta Criada com Sucesso")
     }
     catch {
       showToast(0, "Ocorreu um erro ao criar a consulta. Por favor, tente novamente.");
@@ -81,9 +81,6 @@
       toastError = message;
       showErrorToast = true;
     }
-  }
-
-    function showToastSuccess(type: number, message: string) {
     if (type == 1) {
       toastSuccess = message;
       showSuccessToast = true;

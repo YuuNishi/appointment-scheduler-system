@@ -100,7 +100,7 @@
     if (data.ok) {
       let dataJson = await data.json();
       resetUserInformation(dataJson.username);
-      showToastSuccess(1, "Nome Atualizado com Sucesso");
+      showToast(1, "Nome Atualizado com Sucesso");
     }
     else if (data.status === 409) {
       showToast(0, "Nome de usuário já está sendo utilizado no momento");
@@ -118,7 +118,7 @@
     if (data.ok) {
       let dataJson = await data.json();
       username = dataJson.username;
-      showToastSuccess(1, "Senha atualizada com sucesso");
+      showToast(1, "Senha atualizada com sucesso");
       
         setTimeout(() => {
             currentPassword = '';
@@ -135,7 +135,7 @@
 
     if (data.ok) {
       $userInformation.avatar = get_avatar_by_enum(selectedAvatar!);
-      showToastSuccess(1, "Avatar atualizado com sucesso");
+      showToast(1, "Avatar atualizado com sucesso");
     }
     else {
       showToast(0, "Erro inesperado ao alterar o avatar");
@@ -156,15 +156,9 @@
       toastError = message;
       showErrorToast = true;
     }
-  }
-
-  function showToastSuccess(type: number, message: string) {
     if (type == 1) {
       toastSuccess = message;
       showSuccessToast = true;
-    }
-    function clearInput(idInput: string){
-      document.getElementById(idInput).value = "";
     }
   }
 
