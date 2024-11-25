@@ -1,7 +1,9 @@
 from datetime import datetime
 import uuid
-from sqlalchemy import Column, UUID, SmallInteger, String, DateTime
+from sqlalchemy import Column, UUID, SmallInteger, String, DateTime, Enum
 from database.database import Base
+from models.enums import UserAvatarEnum
+
 
 class User(Base):
     __tablename__ = 'user'
@@ -13,3 +15,4 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=datetime.now(), nullable=False)
     status = Column(SmallInteger, default=0, nullable=False)
+    avatar = Column(Enum(UserAvatarEnum), default=UserAvatarEnum.placeholder , nullable=False)

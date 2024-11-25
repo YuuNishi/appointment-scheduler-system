@@ -5,7 +5,6 @@ class AppointmentTypeEnum(enum.Enum):
     specialty_appointment = 1
     emergency_appointment = 2
     return_appointment = 3
-    exam = 4
 
 class PaidEnum(enum.Enum):
     pending = 0
@@ -14,3 +13,9 @@ class PaidEnum(enum.Enum):
 class SexEnum(enum.Enum):
     male = 0
     female = 1
+
+class UserAvatarEnum(enum.Enum):
+    placeholder = 0
+    assistant = 1
+    female_doc = 2
+    male_doc = 3
