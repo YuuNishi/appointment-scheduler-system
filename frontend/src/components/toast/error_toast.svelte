@@ -2,6 +2,10 @@
   let showErrorToast = false;
   let toastError: string;
 
+  $: if (showErrorToast) {
+    setTimeout(() => showErrorToast = false, 2000);
+  }
+
   export { showErrorToast, toastError }
 </script>
 

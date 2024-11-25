@@ -5,6 +5,7 @@
     import type { CreateAppointment } from '../../../types/services/appointment.types';
     import moment from 'moment';
     import ErrorToast from '../../toast/error_toast.svelte';
+    import SuccessToast from '../../toast/success_toast.svelte';
     import { create_appointment } from '../../../services/appointment.service';
   import { createEventDispatcher } from 'svelte';
 
@@ -12,6 +13,9 @@
 
   let showErrorToast: boolean;
   let toastError: string;
+
+  let showSuccessToast: boolean;
+  let toastSuccess: string;  
 
   let doctors: GetAllDoctorsType[] = []; 
   let patients: GetAllPatientType[] = [];
@@ -50,6 +54,7 @@
     try {
       await create_appointment(appointmentData);
       dispatch('submit', { success: true });
+      showToast(1, "Consulta Criada com Sucesso")
     }
     catch {
       showToast(0, "Ocorreu um erro ao criar a consulta. Por favor, tente novamente.");
@@ -75,6 +80,10 @@
     if (type == 0) {
       toastError = message;
       showErrorToast = true;
+    }
+    if (type == 1) {
+      toastSuccess = message;
+      showSuccessToast = true;
     }
   }
 </script>
@@ -197,3 +206,4 @@
 </div>
 
 <ErrorToast bind:showErrorToast bind:toastError />
+<SuccessToast bind:showSuccessToast bind:toastSuccess />
