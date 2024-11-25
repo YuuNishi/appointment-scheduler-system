@@ -5,6 +5,7 @@
   import { userInformation } from '../../../store/user.store';
   import { update_avatar, update_password, update_username } from '../../../services/user.service';
   import ErrorToast from '../../../components/toast/error_toast.svelte';
+  import SuccessToast from '../../../components/toast/success_toast.svelte';
   import Breadcrumb from '../../../components/breadcrumb/breadcrumb.svelte';
   import type { BreadCrumbItemType } from '../../../types/services/shared.types';
   import { get_avatar_by_enum } from '../../../utils/avatar.utils';
@@ -16,6 +17,9 @@
 
   let showErrorToast: boolean;
   let toastError: string;
+  
+  let showSuccessToast: boolean;
+  let toastSuccess: string;  
 
   let breadCrumbItems: BreadCrumbItemType[] = [
     {
@@ -44,21 +48,43 @@
   let newPassword: string = '';
   let showAvatarOptions: boolean = false;
 
-  async function updateInformation() {
+  async function addNewPassword(){
+    isLoading = true;
+    if (currentPassword && newPassword && currentPassword != newPassword) {
+      await updatePassword();
+    }else if(currentPassword === newPassword && currentPassword != "" && newPassword != ""){
+      showToast(0, "Nova Senha é Igual a Senha Atual");
+    }else if(currentPassword === "" && newPassword === ""){
+      showToast(0, "Você deve Preencher os campos para redefinir a senha");
+    }else if(currentPassword === ""){
+      showToast(0, "Campo da senha atual está vazio");
+    }else if(newPassword === ""){
+      showToast(0, "Campo da nova senha está vazio");
+    }
+    isLoading = false;    
+  }
+
+  async function addNewAvatar(){
+    isLoading = true;
+    if (selectedAvatar != null && $userInformation.avatar !== get_avatar_by_enum(selectedAvatar)) {
+      await updateAvatar();
+    }else if($userInformation.avatar === get_avatar_by_enum(selectedAvatar)){
+      showToast(0, "Voce deve escolher um avatar para alterar");
+    }
+    isLoading = false;
+  }
+
+  async function addNewUsername() {
     isLoading = true;
 
     username = username.trim();
 
     if (username && username != $userInformation.username) {
       await updateUsername();
-    }
-
-    if (currentPassword && newPassword && currentPassword != newPassword) {
-      await updatePassword();
-    }
-
-    if (selectedAvatar != null && $userInformation.avatar !== get_avatar_by_enum(selectedAvatar)) {
-      await updateAvatar();
+    }else if(username === $userInformation.username){
+      showToast(0, "Novo nome de usuário é igual ao nome anterior ");
+    }else if(username === ""){
+      showToast(0, "Campo nome de usuário está vazio");
     }
 
     isLoading = false;
@@ -74,11 +100,14 @@
     if (data.ok) {
       let dataJson = await data.json();
       resetUserInformation(dataJson.username);
+      showToastSuccess(1, "Nome Atualizado com Sucesso");
     }
     else if (data.status === 409) {
       showToast(0, "Nome de usuário já está sendo utilizado no momento");
     }
-    else {
+    else if(username.length < 10){
+      showToast(0, "O nome do usuário deve ter mais de 10 caracteres");
+    }else {
       showToast(0, "Ocorreu um erro ao atualizar nome de usuário");
     }
   }
@@ -89,6 +118,12 @@
     if (data.ok) {
       let dataJson = await data.json();
       username = dataJson.username;
+      showToastSuccess(1, "Senha atualizada com sucesso");
+      
+        setTimeout(() => {
+            currentPassword = '';
+            newPassword = "";
+        }, 0);
     }
     else if (data.status === 404) {
       showToast(0, "Senha atual incorreta");
@@ -100,6 +135,7 @@
 
     if (data.ok) {
       $userInformation.avatar = get_avatar_by_enum(selectedAvatar!);
+      showToastSuccess(1, "Avatar atualizado com sucesso");
     }
     else {
       showToast(0, "Erro inesperado ao alterar o avatar");
@@ -121,6 +157,17 @@
       showErrorToast = true;
     }
   }
+
+  function showToastSuccess(type: number, message: string) {
+    if (type == 1) {
+      toastSuccess = message;
+      showSuccessToast = true;
+    }
+    function clearInput(idInput: string){
+      document.getElementById(idInput).value = "";
+    }
+  }
+
 </script>
 
 <main>
@@ -170,6 +217,8 @@
       {/if}
     </section>
 
+    <button class="btn btn-primary mb-4" on:click={addNewAvatar}>Alterar Avatar</button>
+
     <section class="mb-4">
       <div class="form-group">
         <label for="usernameInput">Nome de Usuário</label>
@@ -182,6 +231,8 @@
         />
       </div>
     </section>
+    
+    <button class="btn btn-primary mb-4" on:click={addNewUsername}>Atualizar Nome</button>
 
     <section class="mb-4">
       <div class="form-group">
@@ -205,11 +256,12 @@
         />
       </div>
     </section>
-    <button class="btn btn-primary mt-2" on:click={updateInformation}>Atualizar Informações</button>
+    <button class="btn btn-primary mt-2" on:click={addNewPassword}>Atualizar Senha</button>
   </div>
 </main>
 
 <ErrorToast bind:showErrorToast bind:toastError />
+<SuccessToast bind:showSuccessToast bind:toastSuccess />
 
 <style>
   .avatar-wrapper {
