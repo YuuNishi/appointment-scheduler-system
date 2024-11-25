@@ -2,6 +2,10 @@
   let showSuccessToast = false;
   let toastSuccess: string;
 
+  $: if (showSuccessToast) {
+    setTimeout(() => showSuccessToast = false, 2000);
+  }
+
   export { showSuccessToast, toastSuccess }
 </script>
 
