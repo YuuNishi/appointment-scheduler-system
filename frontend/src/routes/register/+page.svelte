@@ -1,7 +1,9 @@
 <script lang="ts">
-	import Sidebar from "../../components/sidebar/sidebar.svelte";
+  import Sidebar from "../../components/sidebar/sidebar.svelte";
   import { imask } from '@imask/svelte';
-  
+  import {enhance} from '$app/forms'
+
+  export let form 
   const options = { 
     date: '00/00/0000',
     cpf: '000.000.000-00',
@@ -43,8 +45,8 @@
   <Sidebar />
   <div class="content">
     <h1>Novo Paciente</h1>
-    <form method="POST" action="?/create">
-      <p>Geral</p>
+    <form method="POST" action="?/create" use:enhance={()=>{return async({update})=>{update({reset: false})}}} >
+      <p class="section">Geral</p>
       <div class="row g-2 align-items-center">
         <div class="col-auto">
           <label for="name">Nome:</label>
@@ -59,7 +61,7 @@
           <label for="cpf">CPF:</label>
         </div>
         <div class="col-md-2">
-          <input use:imask={options.cpf} name="cpf" required class="form-control" type="text" id="cpf" placeholder="___.___.___-__"/>
+          <input use:imask={options.cpf} name="cpf" minlength="14" required class="form-control" type="text" id="cpf" placeholder="___.___.___-__"/>
         </div>
       </div>
 
@@ -69,7 +71,11 @@
         </div>
         <div class="col-md-2">
           <input use:imask={options.date} class="form-control" required type="text" name="birthdate" id="birthdate" placeholder="__/__/____"/>
+          {#if form?.invalid}
+            <p class="error" >Data inválida</p>
+          {/if}
         </div>
+        
       </div>
 
       <div class="row g-2 align-items-center">
@@ -84,14 +90,14 @@
           </select> 
         </div>
       </div>
-      <p>Endereço</p>
+      <p class="section">Endereço</p>
 
       <div class="row g-2 align-items-center">
         <div class="col-auto">
           <label for="cep">CEP:</label>
         </div>
         <div class="col-md-2">
-          <input use:imask={options.cep} id="cep" name="cep" required class="form-control" placeholder="_____-__"/>
+          <input use:imask={options.cep} id="cep" minlength="8" name="cep" required class="form-control" placeholder="_____-__"/>
         </div>
       </div>
 
@@ -166,8 +172,11 @@
     background-color: white;
     padding: 2rem;
   }
-  p{
+  p.section{
     color: #5398ec;
+  }
+  p.error{
+    color: red;
   }
   div.row {
     margin-bottom: 10px;

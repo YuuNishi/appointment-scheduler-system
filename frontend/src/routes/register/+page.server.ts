@@ -1,8 +1,12 @@
+import { fail, redirect } from "@sveltejs/kit";
 
 export const actions = {
 	create: async ({ request }) => {
-        let headers= {Headers:{Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxMTMwNzMxfQ.SgTXI4yWImVuZydmAKtsMF5_UI3iYb9pFsgccAEzP8A'}}
+        let headers= {Headers:{Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMyNDIzOTkxfQ.WkPcu2rgRBE1h9clQSKfyPyDTIjzzP6dMAAz45ZH0mI'}}
         const general = await request.formData();
+        if (isNaN(new Date(general.get('birthdate').split("/").reverse().join("/")))){
+          return fail(400,{message: 'Invalid date', invalid: true})
+        }
         let cep = general.get('cep')
         cep = cep.replace('-','')
         let address = {
@@ -17,7 +21,7 @@ export const actions = {
           let add_id 
           await fetch('http://127.0.0.1:8000/api/address/',{
             method: 'POST',
-            headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxOTk4NTgwfQ.4ce82rlEbEBVbbB-Yx4gxJCW-I-wQ6b4uR2_kU-6k4A','Content-Type': 'application/json'},
+            headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMyNDIzOTkxfQ.WkPcu2rgRBE1h9clQSKfyPyDTIjzzP6dMAAz45ZH0mI','Content-Type': 'application/json'},
             body: JSON.stringify(address)
           }).then(resp=>resp.json()).then(data=>{add_id =data.id ;})
           return add_id
@@ -31,14 +35,18 @@ export const actions = {
           cpf:general.get('cpf'),
           address_id:id
         }
+        console.log(patient)
         async function addPatient(patient) {
-          const response2 = fetch('http://127.0.0.1:8000/api/patient/',{
-          method: 'POST',
-          headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMxOTk4NTgwfQ.4ce82rlEbEBVbbB-Yx4gxJCW-I-wQ6b4uR2_kU-6k4A','Content-Type': 'application/json'},
-          body: JSON.stringify(patient)
-          })
+          const response2 = fetch('http://127.0.0.1:8000/api/patient/',
+            {
+              method: 'POST',
+              headers: {Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0NzIzYjJmLTEyYTktNGVkNi1iYzVmLWU3M2Y5N2E0MTZhOSIsImVtYWlsIjoidW1pQGV4YW1wbGUuY29tIiwiZXhwIjoxNzMyNDIzOTkxfQ.WkPcu2rgRBE1h9clQSKfyPyDTIjzzP6dMAAz45ZH0mI','Content-Type': 'application/json'},
+              body: JSON.stringify(patient)
+            }
+          )
         }
         await addPatient(patient)
-      return{success: true }
+        throw redirect('303', '/patients')
+        return{success: true }
     },
 };

@@ -1,16 +1,14 @@
 <script>
   import Sidebar from '../../components/sidebar/sidebar.svelte';
-  //import Form from '../patients/-form.svelte';
   import Edit from '../edit/+page.svelte'
-  import {onMount} from "svelte";
   import 'iconify-icon';
 
   //-----------------
-  let showModal = false;
+  export let showModal = false;
 	let modalData;
 
   export let edit;
-
+  export let form
 	function toggleModal(data) {
 		modalData = data;
 		showModal = !showModal;
@@ -40,19 +38,6 @@ function search() {
   }
 }
 ///
-let isSorted = false
-function sortTable() {
-  if(!isSorted){
-    patients.sort((a, b) => a.name.localeCompare(b.name))
-    location.replace(location.href)
-  }else{
-    patients.sort((a, b) => b.name.localeCompare(a.name))
-    isSorted= false
-    
-  }
-}
-
-///
 
 
   export let data
@@ -61,13 +46,31 @@ function sortTable() {
 
   
   let chunks = [];
-  for (let i = 0; i < patients.length; i += 10) {
+  
+  let count =1
+  for (let i = 0; i < patients.length; i += 6) {
     let chunk = [];
-    for (let j = i; j < i + 10 && j < patients.length; j++) {
+    for (let j = i; j < i + 6 && j < patients.length; j++) {
         chunk.push(patients[j]);
     }
     chunks.push(chunk);
+  }
+  let patientPage = chunks[0]
+  function pagination(n){
+      patientPage= chunks[n]
+    
+  }
+  let isSorted = false
+function sortTable() {
+  if(!isSorted){
+    patientPage = patientPage.sort((a, b) => a.name.localeCompare(b.name))
+    isSorted = true
+  }else{
+    patientPage=patientPage.sort((a, b) => b.name.localeCompare(a.name))
+    isSorted= false
+  }
 }
+
 </script>
 
 <main>
@@ -84,11 +87,18 @@ function sortTable() {
 
     <div class="results">
       <div class="text-right">
-        <button class="btn " >
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {#each chunks as c, i}
+              <li class="page-item"><button class="page-link" on:click={()=>pagination(i)} >{i+1}</button></li>
+            {/each}
+          </ul>
+        </nav>
+        <button class="btn control" on:click={()=>sortTable()} >
           <iconify-icon  icon="bi:filter" width="1.8em" height="1.8em" class="icon"></iconify-icon>
         </button>
         <a href="/register">
-          <button class="btn btn-success">Novo Paciente</button>
+          <button class="btn btn-success control">Novo Paciente</button>
         </a>
       </div>
 
@@ -100,10 +110,11 @@ function sortTable() {
             <th scope="col">Sexo</th>
             <th scope="col">Data de nascimento</th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          {#each patients as person}
+          {#each patientPage as person}
             <tr>
               <td>{person.name}</td>
               <td>{person.cpf}</td>
@@ -116,13 +127,21 @@ function sortTable() {
               <td>
                   <iconify-icon  icon="subway:pencil" width="1.2em" on:click={()=>(toggleModal({person}))} height="1.2em" class="icon icon-edit"></iconify-icon>
               </td>
+              <td>
+                <form method="post" action="?/deletePatient">
+                  <button type="submit" class="btn btn-default">
+                    <input type="text" id="id" name="id" hidden value={person.id}>
+                    <iconify-icon  icon="material-symbols:delete" width="1.2em" height="1.2em" class="icon icon-edit"></iconify-icon>
+                  </button>
+                </form>
+              </td>
             </tr>
           {/each}
         </tbody>
       </table>
       {#if showModal}
 	      
-        <Edit on:click={toggleModal} {edit} bind:values={modalData}/>
+        <Edit on:click={toggleModal} {edit} {form} bind:values={modalData} bind:show={showModal} />
         
       {/if}
     </div>
@@ -141,7 +160,7 @@ function sortTable() {
     background-color: #F0F0F0;
     padding: 20px;
   }
-  .btn{
+  .control{
     float: right;
     margin: 1%;
   }

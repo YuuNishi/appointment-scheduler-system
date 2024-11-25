@@ -1,20 +1,29 @@
 <script>
     import { imask } from "@imask/svelte";
-    export let edit, values
+    import {enhance} from '$app/forms'
+    export let edit, values, show
+    export let form
     export let pat = JSON.stringify(values.person)
     pat = JSON.parse(pat)
-
     const options = { 
     date: '00/00/0000',
     cpf: '000.000.000-00'
 	};
+
 </script>
 <div>
     <div on:click|self class='modal'>
         <div class='content'>
             <h1>Editar paciente</h1>
-           <form method="post" action="/patients?/updatePatient">
-            
+            <form method="post" action="/patients?/updatePatient" use:enhance={()=>{ 
+                return async({update, result})=>{
+                    if(result.type ==='success'){
+                        show = false
+                    }else{
+                        update({reset: false})
+                    }  
+                    }}}>
+
             <input name="id" id="id" type="text" hidden value={pat["id"]}>
 
             <div class="row g-2 align-items-center">
@@ -30,7 +39,7 @@
                     <label for="cpf">CPF:</label>
                 </div>
                 <div class="col-md-6">
-                    <input use:imask={options.cpf} id="cpf" name="cpf" required value={pat["cpf"]} class="form-control"/>
+                    <input use:imask={options.cpf} id="cpf" name="cpf" minlength="14" required value={pat["cpf"]} class="form-control"/>
                 </div>
             </div>
             <div class="row g-2 align-items-center">
@@ -38,7 +47,10 @@
                     <label for="birthdate">Data de Nascimento:</label>
                 </div>
                 <div class="col-md-6">
-                    <input use:imask={options.date} id="birthdate" name="birthdate" required value={pat["birth_date"].split("-").reverse().join("/")} class="form-control"/>
+                    <input use:imask={options.date} id="birthdate" name="birthdate" minlength="10" required value={pat["birth_date"].split("-").reverse().join("/")} class="form-control"/>
+                    {#if form?.invalid}
+                        <p class="error" >Data inválida</p>
+                    {/if}
                 </div>
             </div>
             <div class="row g-2 align-items-center">
@@ -75,9 +87,9 @@
                 </div>
             </div>
                 <a href="/patients">
-                    <button on:click class="btn btn-default">Cancelar</button>
+                    <button on:click class="btn btn-outline-danger">Cancelar</button>
                 </a>
-                    <button type="submit" class="btn btn-success">Edit</button>     
+                    <button type="submit" class="btn btn-success" >Edit</button>     
             </form> 
         </div>
     </div>
@@ -115,11 +127,7 @@
     width: 150px;
     text-align: right;;
     }
-    .btn-default{
-        border-color: black;
-    }
-    .btn-default:hover {
-        background-color:#dfdede;
-        transition: 0.7s;
+    .error{
+        color: red;
     }
 </style>
