@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "svelte-modals": "^2.0.0"
+  }
+}
