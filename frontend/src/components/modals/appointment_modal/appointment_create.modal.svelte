@@ -32,7 +32,9 @@
   let isFormValid: boolean;
 
   function validateForm() {
-    isFormValid = !!(appointmentTitle && appointmentType && professionalId && patientId && dateTime && finishTime);
+    const numberCheck = typeof(appointmentType) == 'number';
+
+    isFormValid = !!(appointmentTitle && numberCheck && professionalId && patientId && dateTime && finishTime);
   }
 
   async function handleSubmit() {
@@ -127,7 +129,7 @@
             </div>
             <select class="custom-select form-select" id="appointmentType"
               bind:value={appointmentType}
-              on:input={validateForm}
+              on:change={validateForm}
             >
               <option selected value="" disabled>Selecione o tipo de agendamento</option>
               <option value={0}>Exame de rotina</option>
@@ -145,7 +147,7 @@
             </div>
             <select class="custom-select form-select" id="professional"
               bind:value={professionalId}
-              on:input={validateForm}
+              on:change={validateForm}
             >
               <option selected value="" disabled>Selecione o profissional</option>
               {#each doctors as doctor}
@@ -162,7 +164,7 @@
             </div>
             <select class="form-select" id="patient"
               bind:value={patientId}
-              on:input={validateForm}
+              on:change={validateForm}
             >
               <option selected value="" disabled>Selecione o paciente</option>
               {#each patients as patient}
