@@ -31,6 +31,7 @@
   let startDate = getStartOfWeek(new Date());
   let endDate = moment(startDate).add(6, 'days').toDate();
   let appointments: GetByRangeResponseType[] = [];
+  let currentAppointmentId: number;
 
   onMount(() => {
     searchByRange();
@@ -182,8 +183,11 @@
                 <span class="side-time">{moment(moment().date()).hour(hourIndex).format('H:mm')}</span>
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
-                    <div on:click={executeAppointmentServices} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-paid' : 'event-pending'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
-                    <AppointmentUpdate on:submit={handleModalSubmit} currentAppointmentId={appointment.id} bind:doctors bind:patients />
+                    <div on:click={() => {
+                      executeAppointmentServices();
+                      currentAppointmentId = appointment.id;
+                    }} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-paid' : 'event-pending'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
+                    <AppointmentUpdate on:submit={handleModalSubmit} bind:currentAppointmentId bind:doctors bind:patients />
                   {/if}
                 {/each}
               </div>
