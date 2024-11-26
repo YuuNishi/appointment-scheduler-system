@@ -130,10 +130,10 @@
               on:input={validateForm}
             >
               <option selected value="" disabled>Selecione o tipo de agendamento</option>
-              <option value=0>Exame de rotina</option>
-              <option value=1>Consulta de especialista</option>
-              <option value=2>Consulta de emergência</option>
-              <option value=3>Consulta de retorno</option>
+              <option value={0}>Exame de rotina</option>
+              <option value={1}>Consulta de especialista</option>
+              <option value={2}>Consulta de emergência</option>
+              <option value={3}>Consulta de retorno</option>
             </select>
           </div>
 
