@@ -12,7 +12,7 @@ def get_all(session: Session = Depends(get_db)):
     _service = SpecialtyService(session)
     return _service.get_all()
 
-@router.post("/", status_code=201)
+@router.post("/", status_code=201, response_model=SpecialtyResponse)
 def create_specialty(data: SpecialtyInput, session: Session = Depends(get_db)):
     _service = SpecialtyService(session)
     return _service.create(data)
