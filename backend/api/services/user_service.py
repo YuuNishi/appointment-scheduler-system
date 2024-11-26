@@ -23,6 +23,10 @@ class UserService:
 
     def get_user_information(self, _id: uuid.UUID):
         user = self.user_repository.get_by_id(_id)
+        
+        if user is None:
+            raise HTTPException(status_code=404, detail='Usuário não encontrado')
+
         return UserResponse(username=user.username, avatar=user.avatar)
 
     def update_password(self, _id: uuid.UUID, data: UserPasswordInput):

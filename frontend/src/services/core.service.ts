@@ -16,6 +16,23 @@ const createHeaders = () => {
   return headers
 }
 
+export const keep_alive= async (token: string) => {
+  const url = new URL(SERVER_URL + "/users/user/info");
+
+  const headers = createHeaders();
+
+  if (headers.has("Authorization")) {
+    headers.delete("Authorization");
+  }
+
+  headers.append("Authorization", `Bearer ${token}`)
+
+  return await fetch(url, {
+    method: "GET",
+    headers
+  });
+}
+
 export const get = async (uri: string, params: URLSearchParams | null = null) => {
   const url = new URL(SERVER_URL + uri);
   let query = "";
