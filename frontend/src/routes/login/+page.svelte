@@ -86,7 +86,6 @@
 
       <button type="submit" class="btn btn-login">LOGIN</button>
     </form>
-    <a href="/password-recover">Esqueci minha senha</a>
   </div>
 </div>
 
