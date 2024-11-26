@@ -10,6 +10,8 @@
   import type { BreadCrumbItemType } from '../../../types/services/shared.types';
   import { get_avatar_by_enum } from '../../../utils/avatar.utils';
   import { UserAvatarEnum } from '../../../enums/store.enums';
+  import { USERNAME_PATTERN } from '../../../utils/patterns.utils';
+  import "iconify-icon";
 
   export let data;
 
@@ -80,9 +82,14 @@
     username = username.trim();
 
     if (username && username != $userInformation.username) {
-      await updateUsername();
+      if (username.match(USERNAME_PATTERN)){
+        await updateUsername();
+      }
+      else {
+        showToast(0, "Formato de nome de usuário inválido");
+      }
     }else if(username === $userInformation.username){
-      showToast(0, "Novo nome de usuário é igual ao nome anterior ");
+      showToast(0, "Novo nome de usuário é igual ao nome anterior");
     }else if(username === ""){
       showToast(0, "Campo nome de usuário está vazio");
     }
@@ -105,9 +112,7 @@
     else if (data.status === 409) {
       showToast(0, "Nome de usuário já está sendo utilizado no momento");
     }
-    else if(username.length < 10){
-      showToast(0, "O nome do usuário deve ter mais de 10 caracteres");
-    }else {
+    else {
       showToast(0, "Ocorreu um erro ao atualizar nome de usuário");
     }
   }
@@ -221,11 +226,21 @@
       <legend>Alterar nome de usuário</legend>
 
       <div class="form-group">
-        <label for="usernameInput">Nome de Usuário</label>
+        <div class="d-flex align-items-center">
+          <label for="usernameInput">Nome de Usuário</label>
+          <iconify-icon
+            icon="material-symbols-light:help-outline"
+            style="cursor: pointer;"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Nome deve ter entre 8 a 20 caracteres. Deve-se iniciar com uma letra e não deve possuir caracteres especiais, com exceção do underline"
+          />
+        </div>
         <input
           type="text"
           class="form-control"
           id="usernameInput"
+          maxlength="20"
           bind:value={username}
           placeholder="Novo nome de usuário"
         />

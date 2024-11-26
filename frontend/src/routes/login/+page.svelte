@@ -35,7 +35,7 @@
         await goto('/appointments');
       }
       else if (response.status === 400 || response.status === 422) {
-        showToast(0, 'Erro nos parâmetros, valores inseridos inválidos');
+        showToast(0, 'Parâmetros inseridos são inválidos');
       }
       else if (response.status === 404) {
         showToast(0, 'Email e/ou senha de usuário inválidos');
@@ -63,7 +63,16 @@
     <h2>Informe suas credenciais para acessar o sistema</h2>
     <form on:submit={handleSubmit}>
       <div class="mb-3">
-        <label for="email" class="form-label">Endereço de email</label>
+        <div>
+          <label for="email" class="form-label">Endereço de email</label>
+          <iconify-icon
+            icon="material-symbols-light:help-outline"
+            style="cursor: pointer;"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Email deve ter até 100 caracteres"
+          />
+        </div>
         <div class="input-icon">
           <iconify-icon icon="carbon:email" width="20" height="20" />
           <input
@@ -71,6 +80,7 @@
             placeholder="usuario@dominio.com"
             class="form-control"
             id="email"
+            maxlength="100"
             bind:value={email}
           />
         </div>
