@@ -178,6 +178,9 @@
             </select>
           </div>
 
+          {#if doctors.filter(doctor => doctor.id === professionalId).length === 0}
+            <span class="text-danger opacity-75" style="pointer-events: none">Médico atualmente vinculado foi desabilitado</span>
+          {/if}
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="professional">
