@@ -177,6 +177,8 @@
     <h1>Configurações de Usuário</h1>
 
     <section class="mb-4">
+      <legend>Alterar Avatar</legend>
+
       <div class="avatar-wrapper me-3">
         <img
           src={selectedAvatar !== null ? get_avatar_by_enum(selectedAvatar) : $userInformation.avatar}
@@ -185,8 +187,8 @@
           style="width: 80px; height: 80px; cursor: pointer;"
           on:click={toggleAvatarOptions}
         />
-        <div class="avatar-overlay">
-          <span>Alterar Avatar</span>
+        <div class="avatar-overlay justify-content-center">
+          <span>Trocar</span>
         </div>
       </div>
 
@@ -209,11 +211,15 @@
           </div>
         </div>
       {/if}
+
+      <button class="btn btn-primary my-2 d-block" on:click={addNewAvatar}>Salvar</button>
     </section>
 
-    <button class="btn btn-primary mb-4" on:click={addNewAvatar}>Alterar Avatar</button>
+    <hr />
 
     <section class="mb-4">
+      <legend>Alterar nome de usuário</legend>
+
       <div class="form-group">
         <label for="usernameInput">Nome de Usuário</label>
         <input
@@ -224,11 +230,15 @@
           placeholder="Novo nome de usuário"
         />
       </div>
+
+      <button class="btn btn-primary my-2 d-block" on:click={addNewUsername}>Salvar</button>
     </section>
-    
-    <button class="btn btn-primary mb-4" on:click={addNewUsername}>Atualizar Nome</button>
+
+    <hr />
 
     <section class="mb-4">
+      <legend>Alterar senha de usuário</legend>
+
       <div class="form-group">
         <label for="currentPassword">Senha Atual</label>
         <input
@@ -249,8 +259,9 @@
           placeholder="Nova senha"
         />
       </div>
+
+      <button class="btn btn-primary my-2 d-block" on:click={addNewPassword}>Atualizar Senha</button>
     </section>
-    <button class="btn btn-primary mt-2" on:click={addNewPassword}>Atualizar Senha</button>
   </div>
 </main>
 

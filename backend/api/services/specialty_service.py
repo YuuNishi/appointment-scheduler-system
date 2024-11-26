@@ -1,3 +1,4 @@
+from sqlalchemy import false
 from sqlalchemy.orm import Session
 from repositories.specialty_repository import SpecialtyRepository
 from schemas.specialty_schema import SpecialtyInput, SpecialtyResponse
@@ -8,7 +9,11 @@ class SpecialtyService:
         self.specialty_repository = SpecialtyRepository(session)
         
     def create(self, data: SpecialtyInput):
-        specialty = self.specialty_repository.create(data)
+        specialty = self.specialty_repository.get_by_description(data.description)
+
+        if bool(specialty) == False:
+            specialty = self.specialty_repository.create(data)
+
         return SpecialtyResponse(**specialty.model_dump(exclude_none=True))
         
     def get_all(self):

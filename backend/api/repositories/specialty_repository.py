@@ -16,3 +16,6 @@ class SpecialtyRepository:
     def get_all(self):
         specialties= self.session.query(Specialty).filter_by()
         return specialties
+
+    def get_by_description(self, _description: str):
+        return self.session.query(Specialty).filter_by(description=_description).first()
