@@ -23,7 +23,7 @@
     <LoadingSpinner />
   {/if}
 
-  <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
+  <div class="content {$isDarkTheme && 'text-white'} {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
     <Breadcrumb breadCrumbItems={breadCrumbItems} />
 
     <h1 class="mb-3">Configurações</h1>

@@ -171,7 +171,7 @@
     <LoadingSpinner />
   {/if}
 
-  <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
+  <div class="content {$isDarkTheme && 'text-white'} {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
     <Breadcrumb breadCrumbItems={breadCrumbItems} />
 
     <h1>Configurações de Usuário</h1>
@@ -201,7 +201,7 @@
                 <img
                   src={get_avatar_by_enum(avatar)}
                   alt="avatar"
-                  class="rounded-circle avatar-item border"
+                  class="rounded-circle avatar-item border {$isDarkTheme && 'bg-white'}"
                   style="border-width: {selectedAvatar === avatar
                   ? '3px'
                   : '1px'};"
