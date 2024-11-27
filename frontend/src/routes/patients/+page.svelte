@@ -46,8 +46,6 @@ function search() {
 
   
   let chunks = [];
-  
-  let count =1
   for (let i = 0; i < patients.length; i += 6) {
     let chunk = [];
     for (let j = i; j < i + 6 && j < patients.length; j++) {

@@ -6,3 +6,20 @@ export type GetAllPatientType = {
   birth_date: Date,
   CPF: string
 }
+export type CreatePatientType = {
+  name: string,
+  status: number,
+  sex: number,
+  birth_date: string,
+  cpf: string,
+  address_id: number
+}
+export type UpdatePatientType = {
+  name: string,
+  status: number,
+  sex: number,
+  birth_date: string,
+  cpf: string,
+  address_id: number
+}
+
