@@ -4,7 +4,7 @@
   import {enhance} from '$app/forms'
   import { create_patient } from '../../services/patient.service';
   import { create_address } from '../../services/address.service';
-  import { error } from "@sveltejs/kit";
+  import { error, redirect } from "@sveltejs/kit";
   import type { CreatePatientType } from "../../types/services/patient.types";
   import type {CreateAddressType} from "../../types/services/address.types"
 
@@ -89,6 +89,7 @@ async function onclickCreate(patient: CreatePatientType, address: CreateAddressT
     console.log(JSON.stringify(patient))
     await create_address(address)
     await create_patient(patient)
+    throw redirect('303','/records')
     return {success: true}
   }catch{
     return error
@@ -205,7 +206,7 @@ async function onclickCreate(patient: CreatePatientType, address: CreateAddressT
           <a href="/records">
             <button type="button" class="btn btn-default btn-outline" >Voltar sem salvar</button>
           </a>
-          <button class="btn btn-success" type="submit" disabled= {!validDate} on:click={onclickCreate(patientMock)}>Salvar</button>
+          <button class="btn btn-success" type="submit" disabled= {!validDate} on:click={onclickCreate(patientMock, addressMock)}>Salvar</button>
         </div>
       </div>
     </form>  
