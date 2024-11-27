@@ -205,7 +205,7 @@ async function onclickCreate(patient: CreatePatientType, address: CreateAddressT
           <a href="/records">
             <button type="button" class="btn btn-default btn-outline" >Voltar sem salvar</button>
           </a>
-          <button class="btn btn-success" type="submit" disabled= {!validDate} on:click={onclickCreate(patient)}>Salvar</button>
+          <button class="btn btn-success" type="submit" disabled= {!validDate} on:click={onclickCreate(patientMock)}>Salvar</button>
         </div>
       </div>
     </form>  
