@@ -13,7 +13,7 @@ class PatientRepository:
         self.session.refresh(patient)
         return PatientResponse(**patient.__dict__)
     def get_all(self):
-        patients= self.session.query(Patient).filter_by(status=1)
+        patients= self.session.query(Patient).filter_by(status=0)
         return patients
     def get_by_id(self, _id: int):
         return self.session.query(Patient).filter_by(id=_id).first()
@@ -30,7 +30,7 @@ class PatientRepository:
         self.session.refresh(patient)
         return PatientInput(**patient.__dict__)
     def delete(self, patient: Patient):
-        patient.status = 0
+        patient.status = 1
         self.session.commit()
         self.session.refresh(patient)
         return PatientInput(**patient.__dict__)

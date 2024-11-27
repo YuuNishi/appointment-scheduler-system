@@ -18,11 +18,15 @@ class DoctorRepository:
     def get_by_id(self, _id: int):
         return self.session.query(Doctor).filter_by(id=_id).first()
 
-    def delete(self, doctor: Doctor):
-        self.session.delete(doctor)
+    def disable(self, _id: int):
+        doctor = self.session.query(Doctor).filter_by(id=_id).first()
+        doctor.status = 1
         self.session.commit()
+        self.session.refresh(doctor)
         return DoctorResponse(**doctor.__dict__)
         
     def get_all(self):
-        doctors= self.session.query(Doctor).join(Specialty, Specialty.id == Doctor.speciality_id).filter_by()
+        doctors= self.session.query(Doctor).join(Specialty, Specialty.id == Doctor.speciality_id).filter(
+            Doctor.status == 0
+        )
         return doctors

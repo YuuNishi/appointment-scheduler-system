@@ -28,12 +28,17 @@ class AppointmentRepository:
     def update(self, data: AppointmentUpdateInput, appointment: Appointment):
         appointment.title = data.title
         appointment.patient_id = data.patient_id
-        appointment.doctor_ids = data.doctor_ids
         appointment.date = data.date
         appointment.type = data.type
         appointment.start_time = data.start_time
         appointment.finish_time = data.finish_time
         appointment.paid = data.paid
+
+        new_doctors = self.session.query(Doctor).filter(Doctor.id.in_(data.doctor_ids)).all()
+
+        appointment.doctors.clear()
+        appointment.doctors.extend(new_doctors)
+
         self.session.commit()
         self.session.refresh(appointment)
         return AppointmentResponse(**appointment.__dict__)

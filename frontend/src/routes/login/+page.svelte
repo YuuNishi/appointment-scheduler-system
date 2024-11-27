@@ -4,10 +4,11 @@
   import type { CreateTokenType } from '../../types/services/token.types.js';
   import { goto } from '$app/navigation';
   import { setCookie } from '../../utils/cookies.utils';
-  import moment from 'moment';
   import ErrorToast from '../../components/toast/error_toast.svelte';
   import { userInformation } from '../../store/user.store';
+  import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
 
+  let isLoading: boolean;
   let showErrorToast: boolean;
   let toastError: string;
 
@@ -23,12 +24,13 @@
     };
 
     try {
+      isLoading = true;
+
       const response = await create_token(request);
       if (response.ok) {
         const { token, username } = await response.json();
 
         setCookie('token', token, 1);
-        setCookie('token_create', moment.utc().toISOString(), 1);
 
         if (username) {
           $userInformation.username = username;
@@ -37,13 +39,16 @@
         await goto('/appointments');
       }
       else if (response.status === 400 || response.status === 422) {
-        showToast(0, 'Erro nos parâmetros, valores inseridos inválidos');
+        showToast(0, 'Parâmetros inseridos são inválidos');
       }
       else if (response.status === 404) {
         showToast(0, 'Email e/ou senha de usuário inválidos');
       }
     } catch {
       showToast(0, 'Erro ao realizar autenticação');
+    }
+    finally {
+      isLoading = false;
     }
   }
 
@@ -56,6 +61,11 @@
 </script>
 
 <div class="login-container">
+
+  {#if (isLoading)}
+    <LoadingSpinner />
+  {/if}
+
   <div class="login-left">
     <h1>Login como atendente</h1>
     <iconify-icon icon="emojione-v1:hospital" width="256" height="256" />
@@ -65,7 +75,16 @@
     <h2>Informe suas credenciais para acessar o sistema</h2>
     <form on:submit={handleSubmit}>
       <div class="mb-3">
-        <label for="email" class="form-label">Endereço de email</label>
+        <div>
+          <label for="email" class="form-label">Endereço de email</label>
+          <iconify-icon
+            icon="material-symbols-light:help-outline"
+            style="cursor: pointer;"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Email deve ter até 100 caracteres"
+          />
+        </div>
         <div class="input-icon">
           <iconify-icon icon="carbon:email" width="20" height="20" />
           <input
@@ -73,6 +92,7 @@
             placeholder="usuario@dominio.com"
             class="form-control"
             id="email"
+            maxlength="100"
             bind:value={email}
           />
         </div>
@@ -88,7 +108,6 @@
 
       <button type="submit" class="btn btn-login">LOGIN</button>
     </form>
-    <a href="/password-recover">Esqueci minha senha</a>
   </div>
 </div>
 

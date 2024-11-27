@@ -4,12 +4,25 @@
   import 'iconify-icon';
   import moment from 'moment';
   import ErrorToast from '../../toast/error_toast.svelte';
-  import { delete_appointment, get_appointment_by_id, update_appointment } from '../../../services/appointment.service';
+  import {
+    delete_appointment,
+    get_appointment_by_id,
+    update_appointment
+  } from '../../../services/appointment.service';
   import type { GetAllDoctorsType } from '../../../types/services/doctor.types';
   import type { GetAllPatientType } from '../../../types/services/patient.types';
-  import type { GetByIdResponseType, UpdateAppointment } from '../../../types/services/appointment.types';
+  import type {
+    GetByIdResponseType,
+    UpdateAppointment
+  } from '../../../types/services/appointment.types';
 
   const dispatch = createEventDispatcher();
+
+  let form: HTMLFormElement;
+
+  function formReset() {
+    form.reset();
+  }
 
   let modalElement: HTMLElement;
 
@@ -57,7 +70,7 @@
       patient_id: patientId,
       date: moment(dateTime).format('YYYY-MM-DD'),
       start_time: moment(dateTime).format('HH:mm:ss'),
-      finish_time: moment(dateTime).add(finishTime, 'minutes').format('HH:mm:ss'),
+      finish_time: moment(dateTime).add(finishTime, 'minutes').format('HH:mm:ss')
     };
 
     try {
@@ -110,10 +123,11 @@
       paidType = currentAppointment.paid;
       professionalId = currentAppointment.doctor_ids[0];
       patientId = currentAppointment.patient_id;
-      dateTime = moment(`${currentAppointment.date}T${currentAppointment.start_time}`).format('YYYY-MM-DDTHH:mm:ss');
+      dateTime = moment(`${currentAppointment.date}T${currentAppointment.start_time}`).format(
+        'YYYY-MM-DDTHH:mm:ss'
+      );
       finishTime = currentAppointment.duration;
-    }
-    catch {
+    } catch {
       showToast(0, 'Ocorreu um erro ao buscar a consulta. Por favor, tente novamente.');
     }
 
@@ -143,11 +157,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title fs-5" id="appointmentUpdateLabel">Editar Consulta</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+          on:click={formReset}
+        ></button>
       </div>
 
       <div class="modal-body">
-        <form>
+        <form bind:this={form}>
           <div class="mb-3">
             <label for="appointmentTitle" class="form-label">Nome da Consulta</label>
             <input
@@ -166,9 +186,11 @@
                 <iconify-icon icon="raphael:calendar" width="26" height="26" />
               </label>
             </div>
-            <select class="custom-select form-select" id="appointmentType"
-                    bind:value={appointmentType}
-                    on:input={validateForm}
+            <select
+              class="custom-select form-select"
+              id="appointmentType"
+              bind:value={appointmentType}
+              on:input={validateForm}
             >
               <option value="" disabled>Selecione o tipo de agendamento</option>
               <option value={0}>Exame de rotina</option>
@@ -178,15 +200,22 @@
             </select>
           </div>
 
+          {#if doctors.filter((doctor) => doctor.id === professionalId).length === 0}
+            <span class="text-danger opacity-75" style="pointer-events: none"
+              >Médico atualmente vinculado foi desabilitado</span
+            >
+          {/if}
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="professional">
                 <iconify-icon icon="fontisto:doctor" width="26" height="26" />
               </label>
             </div>
-            <select class="custom-select form-select" id="professional"
-                    bind:value={professionalId}
-                    on:input={validateForm}
+            <select
+              class="custom-select form-select"
+              id="professional"
+              bind:value={professionalId}
+              on:input={validateForm}
             >
               <option value="" disabled>Selecione o profissional</option>
               {#each doctors as doctor}
@@ -201,10 +230,7 @@
                 <iconify-icon icon="ic:sharp-person" width="26" height="26" />
               </label>
             </div>
-            <select class="form-select" id="patient"
-                    bind:value={patientId}
-                    on:input={validateForm}
-            >
+            <select class="form-select" id="patient" bind:value={patientId} on:input={validateForm}>
               <option value="" disabled>Selecione o paciente</option>
               {#each patients as patient}
                 <option value={patient.id}>{patient.name}</option>
@@ -218,10 +244,7 @@
                 <iconify-icon icon="ion:card-outline" width="26" height="26" />
               </label>
             </div>
-            <select class="form-select" id="payment"
-                    bind:value={paidType}
-                    on:input={validateForm}
-            >
+            <select class="form-select" id="payment" bind:value={paidType} on:input={validateForm}>
               <option value="" disabled>Status do pagamento</option>
               <option value={0}>Pagamento Pendente</option>
               <option value={1}>Pagamento Realizado</option>
@@ -229,10 +252,15 @@
           </div>
 
           <div class="mb-3">
-            <label for="dateTime" class="form-label"><i class="bi bi-calendar"></i> Data e Hora da consulta</label>
-            <input type="datetime-local" class="form-control" id="dateTime"
-                   bind:value={dateTime}
-                   on:input={validateForm}
+            <label for="dateTime" class="form-label"
+              ><i class="bi bi-calendar"></i> Data e Hora da consulta</label
+            >
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="dateTime"
+              bind:value={dateTime}
+              on:input={validateForm}
             />
           </div>
 
@@ -251,11 +279,27 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-danger ms-2" data-bs-dismiss="modal" on:click={handleDelete}>
-          <iconify-icon icon="game-icons:trash-can" width="1.2rem" height="1.2rem"/>
+        <button
+          type="button"
+          class="btn btn-outline-danger ms-2"
+          data-bs-dismiss="modal"
+          on:click={handleDelete}
+        >
+          <iconify-icon icon="game-icons:trash-can" width="1.2rem" height="1.2rem" />
         </button>
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" on:click={handleSubmit} disabled={!isFormValid}>Salvar</button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          data-bs-dismiss="modal"
+          on:click={formReset}>Cancelar</button
+        >
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          on:click={handleSubmit}
+          disabled={!isFormValid}>Salvar</button
+        >
       </div>
     </div>
   </div>

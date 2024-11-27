@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import moment from 'moment'
+  import moment from 'moment';
   import Sidebar from '../../components/sidebar/sidebar.svelte';
   import Breadcrumb from '../../components/breadcrumb/breadcrumb.svelte';
   import { get_appointments_by_range } from '../../services/appointment.service';
@@ -17,20 +17,29 @@
   import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
   import { isDarkTheme } from '../../store/theme.store';
   import type { BreadCrumbItemType } from '../../types/services/shared.types';
+  import SuccessToast from '../../components/toast/success_toast.svelte';
+  import ErrorToast from '../../components/toast/error_toast.svelte';
 
   let isLoading: boolean;
 
   let breadCrumbItems: BreadCrumbItemType[] = [
     {
-      route: "/appointments",
-      title: "agendamento",
+      route: '/appointments',
+      title: 'agendamento',
       active: true
     }
-  ]
+  ];
 
   let startDate = getStartOfWeek(new Date());
   let endDate = moment(startDate).add(6, 'days').toDate();
   let appointments: GetByRangeResponseType[] = [];
+  let currentAppointmentId: number;
+
+  let showErrorToast: boolean;
+  let toastError: string;
+
+  let showSuccessToast: boolean;
+  let toastSuccess: string;
 
   onMount(() => {
     searchByRange();
@@ -47,6 +56,8 @@
   }
 
   async function searchByRange(criteria?: any) {
+    isLoading = true;
+
     appointments = [];
 
     let data: GetByRangeType = {
@@ -55,9 +66,15 @@
       criteria: (criteria as HTMLInputElement)?.value
     };
 
-    let result = await get_appointments_by_range(data);
+    try {
+      let result = await get_appointments_by_range(data);
 
-    appointments = await result.json();
+      appointments = await result.json();
+    } catch {
+      showToast(0, 'Erro ao recuperar as consultas');
+    } finally {
+      isLoading = false;
+    }
   }
 
   function goToPreviousWeek() {
@@ -97,10 +114,14 @@
   async function executeAppointmentServices() {
     isLoading = true;
 
-    await getAllDoctors();
-    await getAllPatients();
-
-    isLoading = false;
+    try {
+      await getAllDoctors();
+      await getAllPatients();
+    } catch {
+      showToast(0, 'Ocorreu um erro ao consultar as informações');
+    } finally {
+      isLoading = false;
+    }
   }
 
   function handleModalSubmit() {
@@ -122,17 +143,28 @@
 
     patients = await result.json();
   }
+
+  function showToast(type: number, message: string) {
+    if (type == 0) {
+      toastError = message;
+      showErrorToast = true;
+    }
+    if (type == 1) {
+      toastSuccess = message;
+      showSuccessToast = true;
+    }
+  }
 </script>
 
 <main>
   <Sidebar />
 
-  {#if (isLoading)}
+  {#if isLoading}
     <LoadingSpinner />
   {/if}
 
   <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
-    <Breadcrumb breadCrumbItems={breadCrumbItems} />
+    <Breadcrumb {breadCrumbItems} />
     <div class="calendar-container">
       <nav class="navbar">
         <div class="navbar-content">
@@ -179,11 +211,30 @@
           <div class="day-column">
             {#each Array(24) as _, hourIndex}
               <div class="time-slot" style="position: relative;">
-                <span class="side-time">{moment(moment().date()).hour(hourIndex).format('H:mm')}</span>
+                {#if dayIndex == 0}
+                  <span class="side-time"
+                    >{moment(moment().date()).hour(hourIndex).format('H:mm')}</span
+                  >
+                {/if}
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
-                    <div on:click={executeAppointmentServices} data-bs-toggle="modal" data-bs-target="#appointmentUpdate" class="event {appointment.paid ? 'event-paid' : 'event-pending'}">{appointment.title}<br>{appointment.start_time} - {appointment.finish_time}</div>
-                    <AppointmentUpdate on:submit={handleModalSubmit} currentAppointmentId={appointment.id} bind:doctors bind:patients />
+                    <div
+                      on:click={() => {
+                        executeAppointmentServices();
+                        currentAppointmentId = appointment.id;
+                      }}
+                      data-bs-toggle="modal"
+                      data-bs-target="#appointmentUpdate"
+                      class="event {appointment.paid ? 'event-paid' : 'event-pending'}"
+                    >
+                      {appointment.title}<br />{appointment.start_time} - {appointment.finish_time}
+                    </div>
+                    <AppointmentUpdate
+                      on:submit={handleModalSubmit}
+                      bind:currentAppointmentId
+                      bind:doctors
+                      bind:patients
+                    />
                   {/if}
                 {/each}
               </div>
@@ -194,6 +245,9 @@
     </div>
   </div>
 </main>
+
+<ErrorToast bind:showErrorToast bind:toastError />
+<SuccessToast bind:showSuccessToast bind:toastSuccess />
 
 <style>
   .calendar-container {
@@ -245,28 +299,28 @@
   }
 
   .event-paid {
-      border-left: 3px solid #0056b3;
+    border-left: 3px solid #0056b3;
   }
 
   .event-pending {
-      border-left: 3px solid red;
+    border-left: 3px solid red;
   }
 
   .event {
-      cursor: pointer;
-      position: absolute;
-      top: 20%;
-      left: 5%;
-      width: 90%;
-      background-color: #e6f7ff;
-      color: #0056b3;
-      padding: 5px;
-      font-size: 12px;
-      border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    top: 20%;
+    left: 5%;
+    width: 90%;
+    background-color: #e6f7ff;
+    color: #0056b3;
+    padding: 5px;
+    font-size: 12px;
+    border-radius: 4px;
   }
 
   .event:hover {
-      background-color: #a4dbf5;
+    background-color: #a4dbf5;
   }
 
   .calendar-header {
@@ -311,8 +365,8 @@
   .side-time {
     position: absolute;
     top: 0;
-    right: 0;
-    font-size: 6px;
+    left: -20px;
+    font-size: 10px;
     color: #555;
     width: 40px;
     text-align: right;
