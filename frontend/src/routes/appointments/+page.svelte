@@ -211,9 +211,11 @@
           <div class="day-column">
             {#each Array(24) as _, hourIndex}
               <div class="time-slot" style="position: relative;">
-                <span class="side-time"
-                  >{moment(moment().date()).hour(hourIndex).format('H:mm')}</span
-                >
+                {#if dayIndex == 0}
+                  <span class="side-time"
+                    >{moment(moment().date()).hour(hourIndex).format('H:mm')}</span
+                  >
+                {/if}
                 {#each appointments as appointment}
                   {#if isCorrectAppointment(appointment, dayIndex, hourIndex)}
                     <div
@@ -363,8 +365,8 @@
   .side-time {
     position: absolute;
     top: 0;
-    right: 0;
-    font-size: 6px;
+    left: -20px;
+    font-size: 10px;
     color: #555;
     width: 40px;
     text-align: right;
