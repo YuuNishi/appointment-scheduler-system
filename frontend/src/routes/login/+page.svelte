@@ -6,7 +6,9 @@
   import { setCookie } from '../../utils/cookies.utils';
   import ErrorToast from '../../components/toast/error_toast.svelte';
   import { userInformation } from '../../store/user.store';
+  import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
 
+  let isLoading: boolean;
   let showErrorToast: boolean;
   let toastError: string;
 
@@ -22,6 +24,8 @@
     };
 
     try {
+      isLoading = true;
+
       const response = await create_token(request);
       if (response.ok) {
         const { token, username } = await response.json();
@@ -43,6 +47,9 @@
     } catch {
       showToast(0, 'Erro ao realizar autenticação');
     }
+    finally {
+      isLoading = false;
+    }
   }
 
   function showToast(type: number, message: string) {
@@ -54,6 +61,11 @@
 </script>
 
 <div class="login-container">
+
+  {#if (isLoading)}
+    <LoadingSpinner />
+  {/if}
+
   <div class="login-left">
     <h1>Login como atendente</h1>
     <iconify-icon icon="emojione-v1:hospital" width="256" height="256" />

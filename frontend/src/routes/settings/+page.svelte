@@ -1,11 +1,8 @@
 <script lang="ts">
-  import LoadingSpinner from '../../components/spinner/loading_spinner.svelte';
   import Sidebar from '../../components/sidebar/sidebar.svelte';
   import { isDarkTheme } from '../../store/theme.store';
   import Breadcrumb from '../../components/breadcrumb/breadcrumb.svelte';
   import type { BreadCrumbItemType } from '../../types/services/shared.types';
-
-  let isLoading: boolean;
 
   let breadCrumbItems: BreadCrumbItemType[] = [
     {
@@ -18,10 +15,6 @@
 
 <main>
   <Sidebar />
-
-  {#if (isLoading)}
-    <LoadingSpinner />
-  {/if}
 
   <div class="content {$isDarkTheme && 'text-white'} {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
     <Breadcrumb breadCrumbItems={breadCrumbItems} />

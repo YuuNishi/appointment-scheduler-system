@@ -11,7 +11,7 @@
   import { get_avatar_by_enum } from '../../../utils/avatar.utils';
   import { UserAvatarEnum } from '../../../enums/store.enums';
   import { USERNAME_PATTERN } from '../../../utils/patterns.utils';
-  import "iconify-icon";
+  import 'iconify-icon';
 
   export let data;
 
@@ -19,22 +19,22 @@
 
   let showErrorToast: boolean;
   let toastError: string;
-  
+
   let showSuccessToast: boolean;
-  let toastSuccess: string;  
+  let toastSuccess: string;
 
   let breadCrumbItems: BreadCrumbItemType[] = [
     {
-      route: "/settings",
-      title: "configurações",
+      route: '/settings',
+      title: 'configurações',
       active: false
     },
     {
-      route: "/settings/user",
-      title: "usuário",
+      route: '/settings/user',
+      title: 'usuário',
       active: true
     }
-  ]
+  ];
 
   const avatars: UserAvatarEnum[] = [
     UserAvatarEnum.placeholder,
@@ -50,51 +50,42 @@
   let newPassword: string = '';
   let showAvatarOptions: boolean = false;
 
-  async function addNewPassword(){
-    isLoading = true;
+  async function addNewPassword() {
     if (currentPassword && newPassword && currentPassword != newPassword) {
       await updatePassword();
-    }else if(currentPassword === newPassword && currentPassword != "" && newPassword != ""){
-      showToast(0, "Nova Senha é Igual a Senha Atual");
-    }else if(currentPassword === "" && newPassword === ""){
-      showToast(0, "Você deve Preencher os campos para redefinir a senha");
-    }else if(currentPassword === ""){
-      showToast(0, "Campo da senha atual está vazio");
-    }else if(newPassword === ""){
-      showToast(0, "Campo da nova senha está vazio");
+    } else if (currentPassword === newPassword && currentPassword != '' && newPassword != '') {
+      showToast(0, 'Nova Senha é Igual a Senha Atual');
+    } else if (currentPassword === '' && newPassword === '') {
+      showToast(0, 'Você deve Preencher os campos para redefinir a senha');
+    } else if (currentPassword === '') {
+      showToast(0, 'Campo da senha atual está vazio');
+    } else if (newPassword === '') {
+      showToast(0, 'Campo da nova senha está vazio');
     }
-    isLoading = false;    
   }
 
-  async function addNewAvatar(){
-    isLoading = true;
+  async function addNewAvatar() {
     if (selectedAvatar != null && $userInformation.avatar !== get_avatar_by_enum(selectedAvatar)) {
       await updateAvatar();
-    }else if($userInformation.avatar === get_avatar_by_enum(selectedAvatar)){
-      showToast(0, "Voce deve escolher um avatar para alterar");
+    } else if ($userInformation.avatar === get_avatar_by_enum(selectedAvatar)) {
+      showToast(0, 'Voce deve escolher um avatar para alterar');
     }
-    isLoading = false;
   }
 
   async function addNewUsername() {
-    isLoading = true;
-
     username = username.trim();
 
     if (username && username != $userInformation.username) {
-      if (username.match(USERNAME_PATTERN)){
+      if (username.match(USERNAME_PATTERN)) {
         await updateUsername();
+      } else {
+        showToast(0, 'Formato de nome de usuário inválido');
       }
-      else {
-        showToast(0, "Formato de nome de usuário inválido");
-      }
-    }else if(username === $userInformation.username){
-      showToast(0, "Novo nome de usuário é igual ao nome anterior");
-    }else if(username === ""){
-      showToast(0, "Campo nome de usuário está vazio");
+    } else if (username === $userInformation.username) {
+      showToast(0, 'Novo nome de usuário é igual ao nome anterior');
+    } else if (username === '') {
+      showToast(0, 'Campo nome de usuário está vazio');
     }
-
-    isLoading = false;
   }
 
   function resetUserInformation(username: string) {
@@ -102,48 +93,69 @@
   }
 
   async function updateUsername() {
-    let data = await update_username({ username })
+    isLoading = true;
 
-    if (data.ok) {
-      let dataJson = await data.json();
-      resetUserInformation(dataJson.username);
-      showToast(1, "Nome Atualizado com Sucesso");
-    }
-    else if (data.status === 409) {
-      showToast(0, "Nome de usuário já está sendo utilizado no momento");
-    }
-    else {
-      showToast(0, "Ocorreu um erro ao atualizar nome de usuário");
+    let data = await update_username({ username });
+
+    try {
+      if (data.ok) {
+        let dataJson = await data.json();
+        resetUserInformation(dataJson.username);
+        showToast(1, 'Nome Atualizado com Sucesso');
+      } else if (data.status === 409) {
+        showToast(0, 'Nome de usuário já está sendo utilizado no momento');
+      } else {
+        throw new Error();
+      }
+    } catch {
+      showToast(0, 'Ocorreu um erro ao atualizar nome de usuário');
+    } finally {
+      isLoading = false;
     }
   }
 
   async function updatePassword() {
-    let data = await update_password({ oldPassword: currentPassword, newPassword});
+    isLoading = true;
+    try {
+      let data = await update_password({ oldPassword: currentPassword, newPassword });
 
-    if (data.ok) {
-      let dataJson = await data.json();
-      username = dataJson.username;
-      showToast(1, "Senha atualizada com sucesso");
-      
+      if (data.ok) {
+        let dataJson = await data.json();
+        username = dataJson.username;
+        showToast(1, 'Senha atualizada com sucesso');
+
         setTimeout(() => {
-            currentPassword = '';
-            newPassword = "";
+          currentPassword = '';
+          newPassword = '';
         }, 0);
-    }
-    else if (data.status === 404) {
-      showToast(0, "Senha atual incorreta");
+      } else if (data.status === 404) {
+        showToast(0, 'Senha atual incorreta');
+      } else {
+        throw new Error();
+      }
+    } catch {
+      showToast(0, 'Erro ao atualizar a senha');
+    } finally {
+      isLoading = false;
     }
   }
 
   async function updateAvatar() {
-    let data = await update_avatar({ avatar: selectedAvatar! });
+    isLoading = true;
 
-    if (data.ok) {
-      $userInformation.avatar = get_avatar_by_enum(selectedAvatar!);
-      showToast(1, "Avatar atualizado com sucesso");
-    }
-    else {
-      showToast(0, "Erro inesperado ao alterar o avatar");
+    try {
+      let data = await update_avatar({ avatar: selectedAvatar! });
+
+      if (data.ok) {
+        $userInformation.avatar = get_avatar_by_enum(selectedAvatar!);
+        showToast(1, 'Avatar atualizado com sucesso');
+      } else {
+        throw new Error();
+      }
+    } catch {
+      showToast(0, 'Erro inesperado ao alterar o avatar');
+    } finally {
+      isLoading = false;
     }
   }
 
@@ -166,7 +178,6 @@
       showSuccessToast = true;
     }
   }
-
 </script>
 
 <main>
@@ -176,8 +187,11 @@
     <LoadingSpinner />
   {/if}
 
-  <div class="content {$isDarkTheme && 'text-white'} {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
-    <Breadcrumb breadCrumbItems={breadCrumbItems} />
+  <div
+    class="content {$isDarkTheme && 'text-white'} {($isDarkTheme && 'content-background-dark') ||
+      'content-background-white'}"
+  >
+    <Breadcrumb {breadCrumbItems} />
 
     <h1>Configurações de Usuário</h1>
 
@@ -186,7 +200,9 @@
 
       <div class="avatar-wrapper me-3">
         <img
-          src={selectedAvatar !== null ? get_avatar_by_enum(selectedAvatar) : $userInformation.avatar}
+          src={selectedAvatar !== null
+            ? get_avatar_by_enum(selectedAvatar)
+            : $userInformation.avatar}
           alt="Avatar atual"
           class="rounded-circle"
           style="width: 80px; height: 80px; cursor: pointer;"
@@ -207,9 +223,7 @@
                   src={get_avatar_by_enum(avatar)}
                   alt="avatar"
                   class="rounded-circle avatar-item border {$isDarkTheme && 'bg-white'}"
-                  style="border-width: {selectedAvatar === avatar
-                  ? '3px'
-                  : '1px'};"
+                  style="border-width: {selectedAvatar === avatar ? '3px' : '1px'};"
                 />
               </div>
             {/each}
@@ -275,7 +289,8 @@
         />
       </div>
 
-      <button class="btn btn-primary my-2 d-block" on:click={addNewPassword}>Atualizar Senha</button>
+      <button class="btn btn-primary my-2 d-block" on:click={addNewPassword}>Atualizar Senha</button
+      >
     </section>
   </div>
 </main>
@@ -298,8 +313,8 @@
   }
 
   .avatar-item {
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
   }
 </style>
