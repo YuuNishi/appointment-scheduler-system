@@ -15,7 +15,7 @@ def get_all(session: Session = Depends(get_db)):
 @router.delete("/{_id}", status_code=200, response_model=DoctorResponse)
 def delete(_id:int, session: Session = Depends(get_db)):
     _service = DoctorService(session)
-    return _service.delete(_id)
+    return _service.disable(_id)
 
 @router.post("/", status_code=201)
 def create_doctor(data: DoctorInput, session: Session = Depends(get_db)):

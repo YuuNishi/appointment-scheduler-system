@@ -6,3 +6,7 @@ export type CreateAddressType = {
     federal_unit: string,
     number: number
 }
+
+export type AddressResponseType = {
+    id: number
+}

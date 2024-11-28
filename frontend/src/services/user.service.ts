@@ -1,4 +1,4 @@
-import { get, patch, patch_literal } from './core.service';
+import { get, patch } from './core.service';
 import type { UpdateAvatarType, UpdatePasswordType, UpdateUsernameType } from '../types/services/user.types';
 
 const ROUTE = "/users";
@@ -12,7 +12,7 @@ export const get_user_information = async () => {
 export const update_password = async (data: UpdatePasswordType) => {
   const uri = ROUTE + "/change/password";
 
-  return await patch_literal(uri, data)
+  return await patch(uri, data)
 }
 
 export const update_username = async (data: UpdateUsernameType) => {

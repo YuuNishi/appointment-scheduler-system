@@ -3,10 +3,6 @@ export type CreateTokenType = {
   password: string
 }
 
-export type KeepAliveTokenType = {
-  token: string
-}
-
 export type TokenResponse = {
   token: string;
   username: string;

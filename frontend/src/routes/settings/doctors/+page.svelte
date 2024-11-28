@@ -51,28 +51,35 @@
   }
 
   async function deleteDoctor(id: string) {
+    isLoading = true;
+
     try {
       let data = await delete_doctor(id);
 
       if (data.ok) {
         showToast(1, 'Médico deletado com sucesso.');
+        await executeDoctorServices();
       } else {
         throw new Error();
       }
     } catch {
       showToast(0, 'Erro inesperado ao deletar o médico.');
     } finally {
-      await executeDoctorServices();
+      isLoading = false;
     }
   }
 
   async function executeDoctorServices() {
     isLoading = true;
 
-    await getAllSpecialties();
-    await getAllDoctors();
-
-    isLoading = false;
+    try {
+      await getAllDoctors();
+      await getAllSpecialties();
+    } catch {
+      showToast(0, 'Ocorreu um erro ao consultar as informações');
+    } finally {
+      isLoading = false;
+    }
   }
 
   async function getAllSpecialties() {
@@ -99,7 +106,10 @@
     <LoadingSpinner />
   {/if}
 
-  <div class="content {($isDarkTheme && 'content-background-dark') || 'content-background-white'}">
+  <div
+    class="content {$isDarkTheme && 'text-white'} {($isDarkTheme && 'content-background-dark') ||
+      'content-background-white'}"
+  >
     <Breadcrumb {breadCrumbItems} />
 
     <h1>Configurações de profissionais</h1>

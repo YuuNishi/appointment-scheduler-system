@@ -10,4 +10,3 @@ class AddressInput(BaseModel):
 
 class AddressResponse(BaseModel):
     id: int
-    street: str

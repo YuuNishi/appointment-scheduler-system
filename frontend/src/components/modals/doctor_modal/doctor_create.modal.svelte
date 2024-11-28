@@ -43,15 +43,20 @@
         description: doctorNewSpecialty
       };
 
-      let data = await create_specialty(specialtyData);
+      try {
+        let data = await create_specialty(specialtyData);
 
-      if (data.ok) {
-        let dataJson: GetSpecialtyType = await data.json();
-        specialtyId = dataJson.id;
+        if (data.ok) {
+          let dataJson: GetSpecialtyType = await data.json();
+          specialtyId = dataJson.id;
+        }
+        else {
+          throw new Error();
+        }
       }
-      else {
+      catch {
         showToast(0, 'Ocorreu um erro ao criar a especialidade');
-        return;
+        dispatch('submit', { success: false });
       }
     }
 

@@ -10,7 +10,7 @@ export type CreatePatientType = {
   name: string,
   status: number,
   sex: number,
-  birth_date: string,
+  birth_date: Date,
   cpf: string,
   address_id: number
 }
