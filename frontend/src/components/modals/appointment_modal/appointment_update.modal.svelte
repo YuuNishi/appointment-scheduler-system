@@ -114,6 +114,7 @@
   }
 
   async function executeAppointmentGet() {
+
     try {
       let result = await get_appointment_by_id(currentAppointmentId);
       currentAppointment = await result.json();
@@ -224,6 +225,11 @@
             </select>
           </div>
 
+          {#if patients.filter((patient) => patient.id === patientId).length === 0}
+            <span class="text-danger opacity-75" style="pointer-events: none"
+            >Paciente atualmente vinculado foi desabilitado</span
+            >
+          {/if}
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="patient">

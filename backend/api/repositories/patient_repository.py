@@ -23,6 +23,7 @@ class PatientRepository:
     def update(self, data: PatientInput, patient: Patient):
         patient.name = data.name
         patient.cpf = data.cpf
+        patient.sex = data.sex
         patient.address_id = data.address_id
         patient.birth_date = data.birth_date
         patient.updated_at = datetime.now()
