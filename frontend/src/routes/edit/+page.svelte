@@ -13,12 +13,7 @@
 
   const gen = [
     { text: 'Feminino', value: 1 },
-    { text: 'Maculino', value: 0 }
-  ];
-
-  const stat = [
-    { text: 'Ativo', value: 1 },
-    { text: 'Inativo', value: 0 }
+    { text: 'Masculino', value: 0 }
   ];
   
   let validDate = true;
@@ -35,7 +30,7 @@
 
     const patientData: UpdatePatientType = {
       name: pat['name'],
-      status: pat['status'],
+      status: 0,
       sex: pat['sex'],
       birth_date: pat['birth_date'],
       cpf,
@@ -110,19 +105,6 @@
             <select id="gender" name="gender" bind:value={pat['sex']} class="form-control">
               {#each gen as g}
                 <option value={g.value}>{g.text}</option>
-              {/each}
-            </select>
-          </div>
-        </div>
-
-        <div class="row g-2 align-items-center">
-          <div class="col-auto">
-            <label for="status">Status:</label>
-          </div>
-          <div class="col-md-2">
-            <select id="status" name="status" bind:value={pat['status']} class="form-control">
-              {#each stat as s}
-                <option value={s.value}>{s.text}</option>
               {/each}
             </select>
           </div>

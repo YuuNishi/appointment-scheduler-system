@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { imask } from '@imask/svelte';
   import Sidebar from '../../components/sidebar/sidebar.svelte';
   import type { GetAllPatientType } from '../../types/services/patient.types';
   import { get_all_patients, remove_patient } from '../../services/patient.service';
